@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "656144931069",
+    "project_id": "inpets-f546d",
+    "storage_bucket": "inpets-f546d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656144931069:android:de186738844ddeb3920694",
+        "android_client_info": {
+          "package_name": "com.raveline.petinlove"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656144931069-pj7utevjocvhfhdg15ukacuhi3akm7ce.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.raveline.petinlove",
+            "certificate_hash": "f13be86bbeb99f0fdb9ee1e78fa25fd91ef0c435"
+          }
+        },
+        {
+          "client_id": "656144931069-k0ai7g5kgnt5ubsgsa3n3ilgv897r4sv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXZ2GvqRpYFWkd7bHuu_sZXVW-f52IcKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656144931069-k0ai7g5kgnt5ubsgsa3n3ilgv897r4sv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

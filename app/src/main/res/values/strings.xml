@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">PetInLove</string>
+    <string name="loading">Loading</string>
+    <string name="welcome_message">AuAuCome to Aur Community</string>
+    <string name="explore_the_application">Explore AU the good things</string>
+    <string name="login">Login</string>
+    <string name="signup">SignUp</string>
+    <string name="don_t_have_an_account_signup">Dont have an account? SignUp Here</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account_click_here">Already have an account? Click here!</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email_empty_msg">Email cannot be empty!</string>
+    <string name="name_empty_msg">Name cannot be empty!</string>
+    <string name="phone_empty_msg">Phone cannot be empty!</string>
+    <string name="password_empty_msg">Password cannot be empty!</string>
+    <string name="address_name_empty_msg">Address name cannot be empty!</string>
+    <string name="city_address_empty_msg">Address city cannot be empty!</string>
+    <string name="address_description_empty_msg">Address description cannot be empty!</string>
+    <string name="address_number_empty_msg">Address number cannot be empty!</string>
+    <string name="address_zip_code_empty_msg">Address zip code cannot be empty!</string>
+    <string name="something_wrong_msg">Something went wrong!</string>
+    <string name="no_internet_connection_msg">No Internet Connection</string>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary_color">#1976D2</color>
+    <color name="primary_dark_color">#303F9F</color>
+    <color name="primary_light_color">#0288D1</color>
+    <color name="secondary_color">#304FFE</color>
+    <color name="secondary_dark_color">#304FFE</color>
+    <color name="secondary_light_color">#0091EA</color>
+
+    <color name="purple">#4A148C</color>
+    <color name="purple_500">#512DA8</color>
+    <color name="purple_300">#673AB7</color>
+    <color name="purple_100">#9575CD</color>
+
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="blue">#0D47A1</color>
+    <color name="blue_500">#0288D1</color>
+    <color name="blue_300">#03A9F4</color>
+
+    <color name="splash">#FA6300</color>
+    <color name="gradient">#FA6300</color>
+    <color name="color_branding">#462A71</color>
+    <color name="abbey">#37404E</color>
+    <color name="mercury">#DEE0E3</color>
+    <color name="concrete">#F4F5F6</color>
+    <color name="transparent">#00000000</color>
+    <color name="black_42">#42000000</color>
+    <color name="black_88">#88000000</color>
+    <color name="gray_chateau">#9CA2AB</color>
+    <color name="gray_oslo">#868D98</color>
+    <color name="color_alerts_9">#721C24</color>
+    <color name="color_alerts_8">#F8D7DA</color>
+    <color name="red">#FF5722</color>
+    <color name="green">#00BCD4</color>
+    <color name="lightOrange">#FF9800</color>
+    <color name="standart_purple">#6459F8</color>
+</resources>

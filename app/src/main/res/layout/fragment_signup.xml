@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        tools:context=".presentation.fragments.SignupFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonSignupFragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_4sdp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bg_login_button"
+                android:elevation="@dimen/_12sdp"
+                android:text="@string/signup"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+            <TextView
+                android:id="@+id/textViewGotoLoginFragmentSignup"
+                style="@style/CustomText.Bold.SubTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/already_have_an_account_click_here"
+                android:textAlignment="center"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@+id/buttonSignupFragment"
+                app:layout_constraintStart_toStartOf="@+id/buttonSignupFragment"
+                app:layout_constraintTop_toBottomOf="@+id/buttonSignupFragment" />
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbarSignupFragment"
+                    style="@android:style/Widget.Toolbar.Button.Navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:navigationIcon="@drawable/ic_baseline_keyboard_backspace_24" />
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/CustomText.Bold.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:text="@string/signup"
+                android:textSize="@dimen/_20sdp"
+                app:layout_constraintStart_toStartOf="@+id/appBarLayout"
+                app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:elevation="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="@+id/appBarLayout"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputSignupFragmentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:elevation="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="@+id/appBarLayout"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputSignupFragmentEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutPhone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:elevation="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="@+id/appBarLayout"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputSignupFragmentPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:elevation="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayoutPhone"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayoutPhone"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPhone"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputSignupFragmentPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
