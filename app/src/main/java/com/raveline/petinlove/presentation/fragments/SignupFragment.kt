@@ -81,7 +81,6 @@ class SignupFragment : Fragment() {
                     }
                     UiState.Success -> {
                         CustomDialogLoading().dismissLoading()
-                        findNavController().navigate(R.id.action_signupFragment_to_mainFragment)
                     }
 
                 }
