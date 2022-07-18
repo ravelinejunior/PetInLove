@@ -16,6 +16,8 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -25,6 +27,8 @@
                 style="@android:style/Widget.Toolbar.Button.Navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:elevation="0dp"
                 app:navigationIcon="@drawable/ic_baseline_keyboard_backspace_24" />
 
 
@@ -32,10 +36,10 @@
 
         <TextView
             android:id="@+id/textView"
+            style="@style/CustomText.Bold.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login"
-            style="@style/CustomText.Bold.Title"
             android:textSize="@dimen/_20sdp"
             app:layout_constraintStart_toStartOf="@+id/appBarLayout"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
@@ -53,6 +57,7 @@
                 android:id="@+id/textInputLoginFragmentEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/transparent"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:singleLine="true" />
@@ -63,42 +68,43 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:passwordToggleEnabled="true"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputLoginFragmentPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="@string/password" />
+                android:backgroundTint="@color/transparent"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonLoginFragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:layout_marginHorizontal="@dimen/_4sdp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_login_button"
             android:elevation="@dimen/_12sdp"
             android:text="@string/login"
             android:textColor="@color/white"
-            android:background="@drawable/bg_login_button"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
         <TextView
             android:id="@+id/textViewLoginFragmentSignup"
+            style="@style/CustomText.Bold.SubTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:text="@string/don_t_have_an_account_signup"
             android:textAlignment="center"
             android:textSize="@dimen/_12sdp"
-            style="@style/CustomText.Bold.SubTitle"
-            android:text="@string/don_t_have_an_account_signup"
             app:layout_constraintEnd_toEndOf="@+id/buttonLoginFragment"
             app:layout_constraintStart_toStartOf="@+id/buttonLoginFragment"
             app:layout_constraintTop_toBottomOf="@+id/buttonLoginFragment" />

@@ -9,7 +9,16 @@
         android:id="@+id/profileFragment"
         android:name="com.raveline.petinlove.presentation.fragments.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_homeActivity"
+            app:destination="@id/homeActivity"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
     <fragment
         android:id="@+id/analyticsFragment"
         android:name="com.raveline.petinlove.presentation.fragments.AnalyticsFragment"
@@ -25,4 +34,9 @@
         android:name="com.raveline.petinlove.presentation.fragments.SearchPersonFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search_person" />
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.raveline.petinlove.presentation.activities.HomeActivity"
+        android:label="HomeActivity"
+        tools:layout="@layout/activity_home" />
 </navigation>

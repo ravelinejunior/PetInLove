@@ -23,6 +23,7 @@
 
         <activity
             android:name=".presentation.activities.HomeActivity"
+            android:theme="@style/Theme.PetInLove.Custom"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

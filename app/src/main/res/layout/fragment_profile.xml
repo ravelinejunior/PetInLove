@@ -1,14 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.fragments.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewProfileFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_16sdp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/edit_profile"
+        style="@style/CustomText.Bold.Title"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewProfileFragment"
+        app:layout_constraintStart_toStartOf="@+id/imageViewProfileFragment"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileFragment" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentAnalytics"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/analytics"
+        style="@style/CustomText.Bold.Title"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentEdit"
+        app:layout_constraintStart_toStartOf="@+id/textViewProfileFragmentEdit"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentEdit" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentSignOut"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/sign_out"
+        android:textAlignment="center"
+        style="@style/CustomText.Bold.Title"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentAnalytics"
+        app:layout_constraintStart_toStartOf="@+id/textViewProfileFragmentAnalytics" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
