@@ -21,15 +21,20 @@ class MainFragment : Fragment() {
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (firebaseAuth.currentUser != null) {
+            findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        if(firebaseAuth.currentUser != null){
-            findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
-        }
+
         return binding.root
 
     }

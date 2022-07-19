@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
@@ -18,12 +20,29 @@ import javax.inject.Inject
 @HiltViewModel
 class UserViewModel @Inject constructor(
     private val userRepository: UserRepositoryImpl,
-    private val firestore: FirebaseFirestore,
+    private val fireStore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth,
     private val application: Application,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
+
+    private val _userFlow = MutableStateFlow<UserModel?>(null)
+    val userModel: StateFlow<UserModel?> get() = _userFlow
+
+    fun getUserData() {
+
+        viewModelScope.launch {
+            userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val result = task.result
+                        _userFlow.value = mapToUser(result)
+                    }
+                }
+        }
+    }
 
     fun loginUser(email: String, password: String) = viewModelScope.launch {
         try {
@@ -59,7 +78,7 @@ class UserViewModel @Inject constructor(
                                 uid = task.result.user?.uid.toString()
                             )
 
-                            firestore.collection(userDatabaseReference).document(user.uid)
+                            fireStore.collection(userDatabaseReference).document(user.uid)
                                 .set(userToMap(user)).addOnCompleteListener { fireTask ->
 
                                     if (fireTask.isSuccessful) {
@@ -82,10 +101,6 @@ class UserViewModel @Inject constructor(
                 _uiStateFlow.value = UiState.Error
             }
         }
-
-    fun logout(firebaseAuth: FirebaseAuth) = viewModelScope.launch {
-        firebaseAuth.signOut()
-    }
 
     private fun checkNonFilledFields(
         name: String,
@@ -119,7 +134,20 @@ class UserViewModel @Inject constructor(
             userFieldName to userModel.userName,
             userFieldEmail to userModel.userEmail,
             userFieldPhoneNumber to userModel.userPhoneNumber,
-            userFieldProfileImage to userModel.userProfileImage
+            userFieldProfileImage to userModel.userProfileImage,
+            userFieldDescription to userModel.userDescription
+        )
+    }
+
+    private fun mapToUser(result: DocumentSnapshot): UserModel {
+        return UserModel(
+            uid = result[userFieldId].toString(),
+            userName = result[userFieldName].toString(),
+            userEmail = result[userFieldEmail].toString(),
+            userPhoneNumber = result[userFieldPhoneNumber].toString(),
+            userDescription = result[userFieldDescription].toString(),
+            userProfileImage = result[userFieldProfileImage].toString(),
+            id = 0
         )
     }
 }

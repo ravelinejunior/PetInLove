@@ -15,6 +15,7 @@
     <string name="name_empty_msg">Name cannot be empty!</string>
     <string name="phone_empty_msg">Phone cannot be empty!</string>
     <string name="password_empty_msg">Password cannot be empty!</string>
+    <string name="description_empty_msg">Description cannot be empty!</string>
     <string name="address_name_empty_msg">Address name cannot be empty!</string>
     <string name="city_address_empty_msg">Address city cannot be empty!</string>
     <string name="address_description_empty_msg">Address description cannot be empty!</string>
@@ -30,4 +31,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="sign_out">Sign Out</string>
+    <string name="change_image">Change Image</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
 </resources>

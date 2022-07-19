@@ -18,6 +18,14 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            />
     </fragment>
     <fragment
         android:id="@+id/analyticsFragment"
@@ -39,4 +47,18 @@
         android:name="com.raveline.petinlove.presentation.activities.HomeActivity"
         android:label="HomeActivity"
         tools:layout="@layout/activity_home" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.raveline.petinlove.presentation.fragments.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            />
+    </fragment>
 </navigation>

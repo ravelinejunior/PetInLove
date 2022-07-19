@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.databinding.FragmentProfileBinding
+import com.raveline.petinlove.presentation.activities.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -21,6 +22,11 @@ class ProfileFragment : Fragment() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +44,12 @@ class ProfileFragment : Fragment() {
             textViewProfileFragmentSignOut.setOnClickListener {
                 logout()
             }
+
+            textViewProfileFragmentEdit.setOnClickListener {
+                findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+            }
         }
+
     }
 
     override fun onDestroy() {
@@ -46,7 +57,7 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
-    private fun logout(){
+    private fun logout() {
         firebaseAuth.signOut().also {
             findNavController().navigate(R.id.action_profileFragment_to_homeActivity)
         }
