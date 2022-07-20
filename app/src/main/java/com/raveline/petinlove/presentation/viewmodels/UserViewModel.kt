@@ -1,12 +1,13 @@
 package com.raveline.petinlove.presentation.viewmodels
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
+import com.google.firebase.storage.FirebaseStorage
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
@@ -22,6 +23,7 @@ class UserViewModel @Inject constructor(
     private val userRepository: UserRepositoryImpl,
     private val fireStore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth,
+    private val storage: FirebaseStorage,
     private val application: Application,
 ) : ViewModel() {
 
@@ -31,6 +33,10 @@ class UserViewModel @Inject constructor(
     private val _userFlow = MutableStateFlow<UserModel?>(null)
     val userModel: StateFlow<UserModel?> get() = _userFlow
 
+    var imagePath = ""
+    var profileImage = ""
+    var result = ""
+
     fun getUserData() {
 
         viewModelScope.launch {
@@ -39,10 +45,85 @@ class UserViewModel @Inject constructor(
                     if (task.isSuccessful) {
                         val result = task.result
                         _userFlow.value = mapToUser(result)
+                        profileImage = result[userFieldProfileImage].toString()
                     }
                 }
         }
     }
+
+    fun editUserData(name: String?, phone: String?, description: String?) =
+        viewModelScope.launch {
+
+            if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
+                _uiStateFlow.value = UiState.Loading
+                if (userModel.value != null) {
+                    storeImage(name, phone, description)
+                }
+            } else {
+                _uiStateFlow.value = UiState.NoConnection
+                result = "No Internet Connection!"
+            }
+        }
+
+    private fun updateUserFlow(name: String?, phone: String?, description: String?) {
+        description?.let {
+            _userFlow.value?.userDescription = it
+        }
+
+        phone?.let {
+            _userFlow.value?.userPhoneNumber = it
+        }
+
+        name?.let {
+            _userFlow.value?.userName = it
+        }
+
+        if (profileImage.isNotEmpty()) {
+            _userFlow.value?.userProfileImage = profileImage
+        }
+
+    }
+
+    private fun storeImage(name: String?, phone: String?, description: String?) =
+        viewModelScope.launch {
+            _uiStateFlow.value = UiState.Loading
+
+            storage.reference.child(userStorageReferenceImage).child(firebaseAuth.uid!!)
+                .child(userModel.value?.userName?.trim().toString() + "_ProfileImage")
+                .putFile(Uri.parse(imagePath))
+                .addOnSuccessListener { task ->
+                    task.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                        if (uri != null) {
+                            profileImage = uri.toString()
+
+                            viewModelScope.launch {
+                                updateUserFlow(name, phone, description)
+                                val user = userModel.value!!
+                                val map = mapOf(
+                                    userFieldProfileImage to profileImage,
+                                    userFieldPhoneNumber to user.userPhoneNumber,
+                                    userFieldName to user.userName,
+                                    userFieldDescription to user.userDescription
+                                )
+
+                                userRepository.editUserDataFromServer(user, map)
+                                    .addOnCompleteListener { inTask ->
+                                        if (inTask.isSuccessful) {
+                                            result = "Successfully Edited!"
+                                            _uiStateFlow.value = UiState.Success
+                                        } else {
+                                            result = inTask.result.toString()
+                                            _uiStateFlow.value = UiState.Error
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                }.addOnFailureListener {
+                    _uiStateFlow.value = UiState.Error
+                }
+
+        }
 
     fun loginUser(email: String, password: String) = viewModelScope.launch {
         try {

@@ -40,10 +40,12 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/profile_avatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayoutEditProfileFragment"
-            tools:src="@tools:sample/avatars" />
+            />
 
         <TextView
             android:id="@+id/textViewEditProfileFragmentImage"
@@ -130,13 +132,15 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:background="@drawable/bg_login_button"
             android:text="@string/save"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:background="@drawable/bg_login_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

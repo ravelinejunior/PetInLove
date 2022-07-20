@@ -10,7 +10,7 @@ interface UserRepository {
     suspend fun loginUserFromServer(email: String, password: String): Task<AuthResult>
     suspend fun getUserDataFromServer(uid: String): Task<DocumentSnapshot>
     suspend fun editUserDataFromServer(
-        imageUrl: String,
-        userModel: UserModel
-    ): Task<DocumentSnapshot>
+        userModel: UserModel,
+        map:Map<String,Any>
+    ): Task<Void>
 }

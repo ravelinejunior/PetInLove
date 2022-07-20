@@ -11,3 +11,7 @@ const val userFieldPhoneNumber = "phoneNumber"
 const val userFieldProfileImage = "profileImage"
 const val userFieldDescription = "description"
 const val userFieldId = "uid"
+const val userStorageReferenceImage = "UserImageProfile"
+
+const val mediaStoreKeyProfileImage = 165164
+

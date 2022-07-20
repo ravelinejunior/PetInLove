@@ -27,9 +27,9 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun editUserDataFromServer(
-        imageUrl: String,
-        userModel: UserModel
-    ): Task<DocumentSnapshot> {
-        return fireStore.collection(userDatabaseReference).document(userModel.uid).get()
+        userModel: UserModel,
+        map:Map<String,Any>
+    ): Task<Void> {
+        return fireStore.collection(userDatabaseReference).document(userModel.uid).update(map)
     }
 }
