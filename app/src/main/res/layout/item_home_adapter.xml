@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/_12sdp"
+    android:layout_margin="@dimen/_4sdp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarAdapterHomeFragment"
+            style="@style/Widget.AppCompat.Toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_4sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageViewAdapterHomeProfileImagePost"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/textViewAdapterHomeUserNamePost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageViewAdapterHomeProfileImagePost"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewAdapterHomeProfileImagePost"
+                    app:layout_constraintTop_toTopOf="@+id/imageViewAdapterHomeProfileImagePost" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <ImageView
+            android:id="@+id/imageViewAdapterHomeMainImagePost"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_240sdp"
+            android:contentDescription="@string/analytics"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarAdapterHomeFragment" />
+
+        <ImageView
+            android:id="@+id/imageViewAdapterHomeLikePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAdapterHomeMainImagePost"
+            app:srcCompat="@drawable/ic_baseline_pets_transparent" />
+
+        <ImageView
+            android:id="@+id/imageViewAdapterHomeCommentariesPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintStart_toEndOf="@+id/imageViewAdapterHomeLikePost"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAdapterHomeMainImagePost"
+            app:srcCompat="@drawable/ic_baseline_mode_comment_24" />
+
+        <ImageView
+            android:id="@+id/imageViewAdapterHomeShareDownloadPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintStart_toEndOf="@+id/imageViewAdapterHomeCommentariesPost"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAdapterHomeMainImagePost"
+            app:srcCompat="@drawable/ic_baseline_screen_share_24" />
+
+        <ImageView
+            android:id="@+id/imageViewAdapterHomeSavePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAdapterHomeMainImagePost"
+            app:srcCompat="@drawable/ic_baseline_turned_in_not_24" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAdapterHomeShareDownloadPost" />
+
+        <TextView
+            android:id="@+id/textViewAdapterHomeNameUserPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageViewAdapterHomeLikePost"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <TextView
+            android:id="@+id/textViewAdapterHomeDescriptionUserPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text="@string/description"
+            android:layout_marginBottom="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textViewAdapterHomeNameUserPost"
+            app:layout_constraintStart_toStartOf="@+id/textViewAdapterHomeNameUserPost"
+            app:layout_constraintTop_toBottomOf="@+id/textViewAdapterHomeNameUserPost" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
