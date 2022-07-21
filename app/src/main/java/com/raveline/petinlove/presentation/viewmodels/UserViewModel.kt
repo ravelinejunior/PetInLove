@@ -56,14 +56,39 @@ class UserViewModel @Inject constructor(
 
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
                 _uiStateFlow.value = UiState.Loading
-                if (userModel.value != null) {
+                if (userModel.value != null && imagePath.isNotEmpty()) {
                     storeImage(name, phone, description)
+                }else{
+                    updateUserWithoutImage(name, phone, description)
                 }
             } else {
                 _uiStateFlow.value = UiState.NoConnection
                 result = "No Internet Connection!"
             }
         }
+
+    private fun updateUserWithoutImage(name: String?, phone: String?, description: String?) = viewModelScope.launch {
+        viewModelScope.launch {
+            updateUserFlow(name, phone, description)
+            val user = userModel.value!!
+            val map = mapOf(
+                userFieldPhoneNumber to user.userPhoneNumber,
+                userFieldName to user.userName,
+                userFieldDescription to user.userDescription
+            )
+
+            userRepository.editUserDataFromServer(user, map)
+                .addOnCompleteListener { inTask ->
+                    if (inTask.isSuccessful) {
+                        result = "Successfully Edited!"
+                        _uiStateFlow.value = UiState.Success
+                    } else {
+                        result = inTask.result.toString()
+                        _uiStateFlow.value = UiState.Error
+                    }
+                }
+        }
+    }
 
     private fun updateUserFlow(name: String?, phone: String?, description: String?) {
         description?.let {

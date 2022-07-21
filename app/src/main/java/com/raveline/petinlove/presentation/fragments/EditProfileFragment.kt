@@ -181,7 +181,7 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private  fun getFieldsAndEditUser() {
+    private fun getFieldsAndEditUser() {
         hideKeyboard()
         binding.apply {
             val name = textInputEditProfileName.text?.toString()?.trim()

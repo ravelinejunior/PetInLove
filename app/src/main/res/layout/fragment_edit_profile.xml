@@ -40,12 +40,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
-            android:scaleType="centerCrop"
             android:background="@drawable/profile_avatar"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutEditProfileFragment"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutEditProfileFragment" />
 
         <TextView
             android:id="@+id/textViewEditProfileFragmentImage"
@@ -74,17 +73,17 @@
                 android:id="@+id/textInputEditProfileName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
                 android:background="@drawable/bg_value_item_card_button"
-                android:hint="@string/name" />
+                android:hint="@string/name"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,24 +93,24 @@
                 android:id="@+id/textInputEditProfilePhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:singleLine="true"
-                android:imeOptions="actionNext"
                 android:background="@drawable/bg_value_item_card_button"
-                android:hint="@string/phone_number" />
+                android:hint="@string/phone_number"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="@dimen/_10sdp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-
             android:backgroundTint="@color/transparent"
+            android:elevation="@dimen/_10sdp"
+
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
@@ -119,10 +118,11 @@
                 android:id="@+id/textInputEditProfileFragmentDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:lines="10"
                 android:background="@drawable/bg_value_item_card_button"
-                android:hint="@string/description" />
+                android:hint="@string/description"
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine"
+                android:lines="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -130,9 +130,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginTop="@dimen/_16sdp"
             android:background="@drawable/bg_login_button"
             android:text="@string/save"
             android:textColor="@color/white"
