@@ -34,4 +34,7 @@
     <string name="change_image">Change Image</string>
     <string name="description">Description</string>
     <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="chat">Chat</string>
+    <string name="logout">Logout</string>
 </resources>

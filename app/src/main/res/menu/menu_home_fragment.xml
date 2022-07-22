@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/chatMenuHomeId"
+        android:icon="@drawable/ic_baseline_mark_chat_read_24"
+        android:title="@string/chat"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/logoutMenuHomeId"
+        android:icon="@drawable/ic_baseline_logout_24"
+        android:title="@string/logout"
+        app:showAsAction="ifRoom"
+        />
+</menu>

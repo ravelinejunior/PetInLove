@@ -24,6 +24,7 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.35733695652173914" />
         <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.3692708333333333" />
         <entry key="app/src/main/res/layout/item_home_adapter.xml" value="0.36770833333333336" />
+        <entry key="app/src/main/res/menu/menu_home_fragment.xml" value="0.2609375" />
       </map>
     </option>
   </component>
