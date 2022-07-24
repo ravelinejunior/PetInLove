@@ -9,12 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
+import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.databinding.FragmentHomeBinding
+import com.raveline.petinlove.domain.utils.CustomDialogLoading
+import com.raveline.petinlove.presentation.adapters.PostItemAdapter
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,6 +36,10 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var postViewModelFactory: PostViewModelFactory
     private val postViewModel: PostViewModel by viewModels { postViewModelFactory }
+
+    private val homeAdapter: PostItemAdapter by lazy {
+        PostItemAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,17 +59,14 @@ class HomeFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        initObservers()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
-
-        lifecycleScope.launchWhenStarted {
-            postViewModel.getPostsFromServer()
-        }
+        setupRecyclerView()
     }
 
     private fun setupToolbar() {
@@ -79,6 +87,48 @@ class HomeFragment : Fragment() {
                 }
                 true
             }
+        }
+    }
+
+    private fun initObservers() {
+        lifecycleScope.launchWhenStarted {
+            postViewModel.uiStateFlow.collectLatest { uiState ->
+                when (uiState) {
+                    UiState.Initial -> {}
+                    UiState.Loading -> {
+                        CustomDialogLoading().startLoading(requireActivity())
+                    }
+                    UiState.Error -> {
+                        CustomDialogLoading().dismissLoading()
+                        Snackbar.make(
+                            binding.root,
+                            getString(R.string.something_wrong_msg),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    UiState.Success -> {
+                        CustomDialogLoading().dismissLoading()
+                    }
+
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            postViewModel.postsFlow.collectLatest { posts ->
+                if (posts.isNotEmpty()) {
+                    homeAdapter.setData(posts)
+                    setupRecyclerView()
+                }
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerViewHomeFragment.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = homeAdapter
         }
     }
 

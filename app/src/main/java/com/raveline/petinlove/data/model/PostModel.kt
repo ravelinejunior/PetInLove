@@ -7,6 +7,5 @@ data class PostModel(
     var uid: String,
     var description: String,
     var imagePath: String,
-    var numLikes: Int,
-    var commentaries: List<String>? = emptyList()
+    var likes: Int = 0,
 )

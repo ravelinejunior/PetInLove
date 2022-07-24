@@ -13,6 +13,7 @@ import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.domain.repository_impl.PostRepositoryImpl
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -37,9 +38,11 @@ class PostViewModel(
         viewModelScope.launch {
             getUserData()
         }
+
     }
 
-    fun getPostsFromServer() = viewModelScope.launch {
+     fun getPostsFromServer() = viewModelScope.launch {
+
         try {
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
                 _uiStateFlow.value = UiState.Loading
@@ -74,14 +77,16 @@ class PostViewModel(
     }
 
     private fun getUserData() {
-
+        _uiStateFlow.value = UiState.Loading
         viewModelScope.launch {
             userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result
                         mUser = mapToUser(result)
-
+                        viewModelScope.launch {
+                            getPostsFromServer()
+                        }
                     }
                 }
         }
@@ -94,8 +99,7 @@ class PostViewModel(
             userImage = mUser!!.userProfileImage,
             imagePath = result[postFieldImagePath].toString(),
             description = result[postFieldDescription].toString(),
-            commentaries = listOf(),
-            numLikes = result[postFieldLikes].toString().toInt(),
+            likes = result[postFieldLikes].toString().toInt(),
             id = 0
         )
     }
