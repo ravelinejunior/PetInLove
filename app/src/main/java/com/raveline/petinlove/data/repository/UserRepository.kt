@@ -2,6 +2,7 @@ package com.raveline.petinlove.data.repository
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.raveline.petinlove.data.model.UserModel
 
@@ -11,6 +12,8 @@ interface UserRepository {
     suspend fun getUserDataFromServer(uid: String): Task<DocumentSnapshot>
     suspend fun editUserDataFromServer(
         userModel: UserModel,
-        map:Map<String,Any>
+        map: Map<String, Any>
     ): Task<Void>
+
+    suspend fun getSearchUsers(): CollectionReference
 }

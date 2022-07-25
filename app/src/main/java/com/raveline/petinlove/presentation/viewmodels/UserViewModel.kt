@@ -2,11 +2,14 @@ package com.raveline.petinlove.presentation.viewmodels
 
 import android.app.Application
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.UserModel
@@ -33,6 +36,9 @@ class UserViewModel @Inject constructor(
     private val _userFlow = MutableStateFlow<UserModel?>(null)
     val userModel: StateFlow<UserModel?> get() = _userFlow
 
+    private val _userListFlow = MutableLiveData<List<UserModel>>()
+    val userListModel: LiveData<List<UserModel>> get() = _userListFlow
+
     var imagePath = ""
     var profileImage = ""
     var result = ""
@@ -51,6 +57,53 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun getSearchedUsers(name: String = "") = viewModelScope.launch {
+        if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
+            val users = arrayListOf<UserModel>()
+            if (name.isNotEmpty()) {
+                userRepository.getSearchUsers().orderBy(userFieldName, Query.Direction.ASCENDING)
+                    .addSnapshotListener { value, error ->
+                        if (value != null) {
+                            _userListFlow.value = emptyList()
+                            for (doc in value.documents) {
+
+                                if (doc[userFieldName].toString()
+                                        .contains(name, ignoreCase = true)
+                                ) {
+                                    users.add(mapToUser(doc))
+                                }
+
+                            }
+
+                            _userListFlow.value = users.sortedBy {
+                                it.userName
+                            }
+                        } else {
+                            result = error.toString()
+                            _uiStateFlow.value = UiState.Error
+                        }
+                    }
+            } else {
+                userRepository.getSearchUsers().addSnapshotListener { value, error ->
+                    if (value != null) {
+                        _userListFlow.value = emptyList()
+                        for (doc in value.documents) {
+                            users.add(mapToUser(doc))
+                        }
+
+                        _userListFlow.value = users
+                    } else {
+                        result = error.toString()
+                        _uiStateFlow.value = UiState.Error
+                    }
+                }
+            }
+        } else {
+            _uiStateFlow.value = UiState.NoConnection
+            result = "No Internet Connection!"
+        }
+    }
+
     fun editUserData(name: String?, phone: String?, description: String?) =
         viewModelScope.launch {
 
@@ -58,7 +111,7 @@ class UserViewModel @Inject constructor(
                 _uiStateFlow.value = UiState.Loading
                 if (userModel.value != null && imagePath.isNotEmpty()) {
                     storeImage(name, phone, description)
-                }else{
+                } else {
                     updateUserWithoutImage(name, phone, description)
                 }
             } else {
@@ -67,28 +120,29 @@ class UserViewModel @Inject constructor(
             }
         }
 
-    private fun updateUserWithoutImage(name: String?, phone: String?, description: String?) = viewModelScope.launch {
+    private fun updateUserWithoutImage(name: String?, phone: String?, description: String?) =
         viewModelScope.launch {
-            updateUserFlow(name, phone, description)
-            val user = userModel.value!!
-            val map = mapOf(
-                userFieldPhoneNumber to user.userPhoneNumber,
-                userFieldName to user.userName,
-                userFieldDescription to user.userDescription
-            )
+            viewModelScope.launch {
+                updateUserFlow(name, phone, description)
+                val user = userModel.value!!
+                val map = mapOf(
+                    userFieldPhoneNumber to user.userPhoneNumber,
+                    userFieldName to user.userName,
+                    userFieldDescription to user.userDescription
+                )
 
-            userRepository.editUserDataFromServer(user, map)
-                .addOnCompleteListener { inTask ->
-                    if (inTask.isSuccessful) {
-                        result = "Successfully Edited!"
-                        _uiStateFlow.value = UiState.Success
-                    } else {
-                        result = inTask.result.toString()
-                        _uiStateFlow.value = UiState.Error
+                userRepository.editUserDataFromServer(user, map)
+                    .addOnCompleteListener { inTask ->
+                        if (inTask.isSuccessful) {
+                            result = "Successfully Edited!"
+                            _uiStateFlow.value = UiState.Success
+                        } else {
+                            result = inTask.result.toString()
+                            _uiStateFlow.value = UiState.Error
+                        }
                     }
-                }
+            }
         }
-    }
 
     private fun updateUserFlow(name: String?, phone: String?, description: String?) {
         description?.let {
