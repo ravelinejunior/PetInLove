@@ -9,13 +9,12 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageViewProfileFragment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
         android:layout_margin="@dimen/_16sdp"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         android:src="@drawable/profile_avatar"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,34 +23,35 @@
         style="@style/CustomText.Bold.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:text="@string/edit_profile"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewProfileFragment"
+        app:layout_constraintBottom_toTopOf="@+id/textViewProfileFragmentSignOut"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/imageViewProfileFragment"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <TextView
         android:id="@+id/textViewProfileFragmentAnalytics"
         style="@style/CustomText.Bold.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/analytics"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textViewProfileFragmentSignOut"
         app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentEdit"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textViewProfileFragmentEdit"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.633" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentEdit" />
 
     <TextView
         android:id="@+id/textViewProfileFragmentSignOut"
+        style="@style/CustomText.Bold.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/sign_out"
         android:textAlignment="center"
-        style="@style/CustomText.Bold.Title"
         android:textColor="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentAnalytics"
@@ -63,12 +63,102 @@
         android:layout_height="1dp"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textViewProfileFragmentAnalytics"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.609"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.56" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentEdit" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentPublications"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/_21"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProfileFragment"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentPublicationText"
+        app:layout_constraintStart_toEndOf="@+id/imageViewProfileFragment"
+        app:layout_constraintTop_toTopOf="@+id/imageViewProfileFragment" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentPublicationText"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:text="@string/publications"
+        app:layout_constraintStart_toEndOf="@+id/imageViewProfileFragment"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentPublications" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentFollowers"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/_69"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProfileFragment"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentFollowersText"
+        app:layout_constraintStart_toStartOf="@+id/textViewProfileFragmentFollowersText"
+        app:layout_constraintTop_toTopOf="@+id/imageViewProfileFragment" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentFollowersText"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:text="@string/followers"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewProfileFragmentPublicationText"
+        app:layout_constraintEnd_toStartOf="@+id/textViewProfileFragmentFollowingText"
+        app:layout_constraintStart_toEndOf="@+id/textViewProfileFragmentPublicationText"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentFollowers" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentFollowing"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="125"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProfileFragment"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileFragmentFollowingText"
+        app:layout_constraintStart_toStartOf="@+id/textViewProfileFragmentFollowingText"
+        app:layout_constraintTop_toTopOf="@+id/imageViewProfileFragment" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentFollowingText"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/following"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewProfileFragmentFollowersText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentFollowing" />
+
+    <TextView
+        android:id="@+id/textViewProfileFragmentDescription"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:text="@string/lorem_ipsum_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageViewProfileFragment"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileFragment" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileFragmentDescription" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

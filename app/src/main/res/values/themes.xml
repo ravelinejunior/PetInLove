@@ -67,4 +67,11 @@
         <item name="android:textColor">@color/black_88</item>
         <item name="android:fontFamily">@font/lato</item>
     </style>
+
+    <style name="CustomText.Bold.Header_Profile" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:textColor">@color/black_88</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

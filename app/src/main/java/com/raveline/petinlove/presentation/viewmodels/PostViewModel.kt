@@ -41,7 +41,7 @@ class PostViewModel(
 
     }
 
-     fun getPostsFromServer() = viewModelScope.launch {
+     private fun getPostsFromServer() = viewModelScope.launch {
 
         try {
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {

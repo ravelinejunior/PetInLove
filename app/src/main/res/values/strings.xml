@@ -37,4 +37,10 @@
     <string name="edit">Edit</string>
     <string name="chat">Chat</string>
     <string name="logout">Logout</string>
+    <string name="_21">21</string>
+    <string name="publications">Publications</string>
+    <string name="_69">69</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="lorem_ipsum_desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. I</string>
 </resources>
