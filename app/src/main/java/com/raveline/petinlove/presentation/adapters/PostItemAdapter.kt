@@ -43,13 +43,13 @@ class PostItemAdapter : RecyclerView.Adapter<PostItemAdapter.MyViewHolder>() {
                     .into(imageViewAdapterHomeMainImagePost)
 
                 Glide.with(imageViewAdapterHomeProfileImagePost)
-                    .load(post.userImage)
+                    .load(post.userAuthorImage)
                     .placeholder(circular)
                     .into(imageViewAdapterHomeProfileImagePost)
 
-                textViewAdapterHomeNameUserPost.text = post.userName
+                textViewAdapterHomeNameUserPost.text = post.userAuthorName
                 textViewAdapterHomeDescriptionUserPost.text = post.description
-                textViewAdapterHomeUserNamePost.text = post.userName
+                textViewAdapterHomeUserNamePost.text = post.userAuthorName
 
             }
         }

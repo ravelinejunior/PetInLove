@@ -20,6 +20,9 @@ const val postFieldImagePath = "imagePath"
 const val postFieldDescription = "description"
 const val postFieldLikes = "likes"
 const val postFieldComments = "comments"
+const val postFieldAuthorId = "authorId"
+const val postFieldUserAuthorName = "userAuthorName"
+const val postFieldUserAuthorImage = "userAuthorImage"
 
 const val mediaStoreKeyProfileImage = 165164
 

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class PostRepositoryImpl @Inject constructor(private val fireStore: FirebaseFirestore) :
     PostRepository {
     override suspend fun getPostsFromServer(uid: String): Task<QuerySnapshot> {
-        return fireStore.collection(userDatabaseReference).document(uid).collection(postFirebaseDatabaseReference).get()
+        return fireStore.collection(postFirebaseDatabaseReference).get()
     }
 
 }

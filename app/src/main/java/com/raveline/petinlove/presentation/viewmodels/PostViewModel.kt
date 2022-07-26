@@ -13,7 +13,6 @@ import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.domain.repository_impl.PostRepositoryImpl
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -41,7 +40,7 @@ class PostViewModel(
 
     }
 
-     private fun getPostsFromServer() = viewModelScope.launch {
+    private fun getPostsFromServer() = viewModelScope.launch {
 
         try {
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
@@ -94,9 +93,10 @@ class PostViewModel(
 
     private fun mapToPost(result: DocumentSnapshot): PostModel {
         return PostModel(
-            uid = result[postFieldUid].toString(),
-            userName = mUser!!.userName,
-            userImage = mUser!!.userProfileImage,
+            postId = result[postFieldUid].toString(),
+            authorId = result[postFieldAuthorId].toString(),
+            userAuthorName = result[postFieldUserAuthorName].toString(),
+            userAuthorImage = result[postFieldUserAuthorImage].toString(),
             imagePath = result[postFieldImagePath].toString(),
             description = result[postFieldDescription].toString(),
             likes = result[postFieldLikes].toString().toInt(),
