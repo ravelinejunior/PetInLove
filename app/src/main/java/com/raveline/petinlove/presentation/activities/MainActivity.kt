@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.profileFragment,
                 R.id.homeFragment,
+                R.id.postFragment,
                 R.id.searchPersonFragment,
                 R.id.analyticsFragment
             )

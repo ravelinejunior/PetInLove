@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.fragments.PostFragment">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivPostFragmentCamera"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/camera_choose"
+        app:layout_constraintBottom_toTopOf="@+id/divider3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvPostFragmentCamera"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/camera"
+        style="@style/CustomText.Bold.Title"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/ivPostFragmentCamera"
+        app:layout_constraintStart_toStartOf="@+id/ivPostFragmentCamera"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostFragmentCamera" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivPostFragmentGallery"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:src="@drawable/image_gallery_choose"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+    <TextView
+        android:id="@+id/tvPostFragmentGallery"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/gallery"
+        android:textAlignment="center"
+        style="@style/CustomText.Bold.Title"
+        app:layout_constraintEnd_toEndOf="@+id/ivPostFragmentGallery"
+        app:layout_constraintStart_toStartOf="@+id/ivPostFragmentGallery"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostFragmentGallery" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

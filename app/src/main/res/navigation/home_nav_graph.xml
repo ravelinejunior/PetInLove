@@ -46,11 +46,6 @@
             app:popExitAnim="@android:anim/fade_out"
             />
     </fragment>
-    <fragment
-        android:id="@+id/searchPersonFragment"
-        android:name="com.raveline.petinlove.presentation.fragments.SearchPersonFragment"
-        android:label="Search"
-        tools:layout="@layout/fragment_search_person" />
     <activity
         android:id="@+id/homeActivity"
         android:name="com.raveline.petinlove.presentation.activities.HomeActivity"
@@ -69,4 +64,14 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
     </fragment>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.raveline.petinlove.presentation.fragments.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
+    <fragment
+        android:id="@+id/searchPersonFragment"
+        android:name="com.raveline.petinlove.presentation.fragments.SearchPersonFragment"
+        android:label="fragment_search_person"
+        tools:layout="@layout/fragment_search_person" />
 </navigation>
