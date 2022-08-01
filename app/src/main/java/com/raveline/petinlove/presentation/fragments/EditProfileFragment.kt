@@ -48,13 +48,13 @@ class EditProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userViewModel.getUserData()
+
         navBar = requireActivity().findViewById(R.id.bnv_main_id)
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
                     navBar.visibility = VISIBLE
                 }
             }
@@ -98,7 +98,7 @@ class EditProfileFragment : Fragment() {
 
             toolbarEditProfileFragment.setNavigationOnClickListener {
                 navBar.visibility = VISIBLE
-                findNavController().popBackStack()
+                findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
             }
         }
     }
@@ -128,6 +128,8 @@ class EditProfileFragment : Fragment() {
             userViewModel.userModel.collectLatest { user ->
                 if (user != null) {
                     displayData(user)
+                } else {
+                    displayData(userViewModel.getLoggedUserFromPref()!!)
                 }
             }
         }
@@ -153,7 +155,10 @@ class EditProfileFragment : Fragment() {
                             binding.root,
                             userViewModel.result,
                             Snackbar.LENGTH_SHORT
-                        ).show()
+                        ).show().also {
+                            navBar.visibility = VISIBLE
+                            findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+                        }
                     }
                     UiState.NoConnection -> {
                         CustomDialogLoading().dismissLoading()

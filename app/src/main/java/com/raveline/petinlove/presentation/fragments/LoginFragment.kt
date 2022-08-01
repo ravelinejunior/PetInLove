@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.databinding.FragmentLoginBinding
@@ -31,9 +32,16 @@ class LoginFragment : Fragment() {
     lateinit var userViewModelFactory: UserViewModelFactory
     private val userViewModel: UserViewModel by viewModels { userViewModelFactory }
 
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        if (firebaseAuth.currentUser != null) {
+            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+        }
     }
 
     override fun onCreateView(

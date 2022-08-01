@@ -18,7 +18,9 @@ import com.raveline.petinlove.databinding.FragmentHomeBinding
 import com.raveline.petinlove.domain.utils.CustomDialogLoading
 import com.raveline.petinlove.presentation.adapters.PostItemAdapter
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
+import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
+import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,6 +34,10 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
+
+    @Inject
+    lateinit var userViewModelFactory: UserViewModelFactory
+    private val userViewModel: UserViewModel by viewModels { userViewModelFactory }
 
     @Inject
     lateinit var postViewModelFactory: PostViewModelFactory
@@ -80,7 +86,7 @@ class HomeFragment : Fragment() {
 
                     }
                     R.id.logoutMenuHomeId -> {
-                        firebaseAuth.signOut().also {
+                        userViewModel.logout().also {
                             findNavController().navigate(R.id.action_homeFragment_to_homeActivity)
                         }
                     }

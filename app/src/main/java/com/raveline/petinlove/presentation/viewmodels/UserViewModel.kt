@@ -1,7 +1,9 @@
 package com.raveline.petinlove.presentation.viewmodels
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.net.Uri
+import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
@@ -27,6 +30,7 @@ class UserViewModel @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth,
     private val storage: FirebaseStorage,
+    private val sharedPref: SharedPreferences,
     private val application: Application,
 ) : ViewModel() {
 
@@ -43,17 +47,24 @@ class UserViewModel @Inject constructor(
     var profileImage = ""
     var result = ""
 
-    fun getUserData() {
+    private fun getUserData() {
 
         viewModelScope.launch {
-            userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val result = task.result
-                        _userFlow.value = mapToUser(result)
-                        profileImage = result[userFieldProfileImage].toString()
+
+            if (getLoggedUserFromPref() != null) return@launch
+            else {
+                userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val result = task.result
+                            saveUserOnPrefs(mapToUser(result))
+                            getLoggedUserFromPref()
+                            profileImage = result[userFieldProfileImage].toString()
+                        }
                     }
-                }
+            }
+
+
         }
     }
 
@@ -135,6 +146,10 @@ class UserViewModel @Inject constructor(
                     .addOnCompleteListener { inTask ->
                         if (inTask.isSuccessful) {
                             result = "Successfully Edited!"
+                            sharedPref.edit(true) {
+                                clear()
+                            }
+                            saveUserOnPrefs(user)
                             _uiStateFlow.value = UiState.Success
                         } else {
                             result = inTask.result.toString()
@@ -185,16 +200,22 @@ class UserViewModel @Inject constructor(
                                     userFieldDescription to user.userDescription
                                 )
 
-                                userRepository.editUserDataFromServer(user, map)
-                                    .addOnCompleteListener { inTask ->
-                                        if (inTask.isSuccessful) {
-                                            result = "Successfully Edited!"
-                                            _uiStateFlow.value = UiState.Success
-                                        } else {
-                                            result = inTask.result.toString()
-                                            _uiStateFlow.value = UiState.Error
+                                viewModelScope.launch {
+                                    userRepository.editUserDataFromServer(user, map)
+                                        .addOnCompleteListener { inTask ->
+                                            if (inTask.isSuccessful) {
+                                                result = "Successfully Edited!"
+                                                sharedPref.edit(true) {
+                                                    clear()
+                                                }
+                                                saveUserOnPrefs(user)
+                                                _uiStateFlow.value = UiState.Success
+                                            } else {
+                                                result = inTask.result.toString()
+                                                _uiStateFlow.value = UiState.Error
+                                            }
                                         }
-                                    }
+                                }
                             }
                         }
                     }
@@ -212,6 +233,8 @@ class UserViewModel @Inject constructor(
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             _uiStateFlow.value = UiState.Success
+                            getUserData()
+
                         } else {
                             _uiStateFlow.value = UiState.Error
                         }
@@ -235,8 +258,11 @@ class UserViewModel @Inject constructor(
                                 userEmail = email,
                                 userName = name,
                                 userPhoneNumber = phone,
-                                uid = task.result.user?.uid.toString()
+                                uid = task.result.user?.uid.toString(),
+                                userProfileImage = firstRegisterUserImage,
                             )
+
+                            saveUserOnPrefs(user)
 
                             fireStore.collection(userDatabaseReference).document(user.uid)
                                 .set(userToMap(user)).addOnCompleteListener { fireTask ->
@@ -262,31 +288,12 @@ class UserViewModel @Inject constructor(
             }
         }
 
-    private fun checkNonFilledFields(
-        name: String,
-        city: String,
-        address: String,
-        number: String
-    ): Boolean {
-        if (name.isNotEmpty()) {
-            if (city.isNotEmpty()) {
-                if (address.isNotEmpty()) {
-                    if (number.isNotEmpty()) {
-                        return number.isNotEmpty()
-                    } else {
-                        return false
-                    }
-                } else {
-                    return false
-                }
-            } else {
-                return false
-            }
-        } else {
-            return false
+    fun logout() = viewModelScope.launch {
+        firebaseAuth.signOut()
+        sharedPref.edit(true) {
+            clear()
         }
     }
-
 
     private fun userToMap(userModel: UserModel): HashMap<String, String> {
         return hashMapOf(
@@ -309,5 +316,24 @@ class UserViewModel @Inject constructor(
             userProfileImage = result[userFieldProfileImage].toString(),
             id = 0
         )
+    }
+
+    private fun saveUserOnPrefs(user: UserModel) {
+        val gson = Gson()
+        val stringUserJson = gson.toJson(user)
+        sharedPref.edit(true) {
+            putString(USER_SAVED_SHARED_PREF_KEY, stringUserJson)
+        }
+        _userFlow.value = gson.fromJson(stringUserJson, UserModel::class.java)
+    }
+
+    fun getLoggedUserFromPref(): UserModel? {
+        if (sharedPref.contains(USER_SAVED_SHARED_PREF_KEY)) {
+            val userJson = sharedPref.getString(USER_SAVED_SHARED_PREF_KEY, null)
+            val gson = Gson()
+            val user = gson.fromJson(userJson, UserModel::class.java)
+            _userFlow.value = user
+            return user
+        } else return null
     }
 }

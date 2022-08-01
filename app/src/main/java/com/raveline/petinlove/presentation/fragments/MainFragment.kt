@@ -28,7 +28,7 @@ class MainFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    activity?.finish()
+                    requireActivity().finish()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -36,6 +36,7 @@ class MainFragment : Fragment() {
         if (firebaseAuth.currentUser != null) {
             findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
         }
+
     }
 
     override fun onCreateView(
@@ -58,6 +59,10 @@ class MainFragment : Fragment() {
 
             buttonMainFragmentSignup.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_signupFragment)
+            }
+
+            if (firebaseAuth.currentUser != null) {
+                findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
             }
         }
     }

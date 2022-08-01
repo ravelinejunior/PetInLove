@@ -12,8 +12,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.raveline.petinlove.R
 import com.raveline.petinlove.databinding.ActivityMainBinding
-import com.raveline.petinlove.presentation.fragments.HomeFragment
-import com.raveline.petinlove.presentation.fragments.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         mainBinding.bnvMainId.setupWithNavController(navController)
-       // mainBinding.bnvMainId.itemIconTintList = null
+        // mainBinding.bnvMainId.itemIconTintList = null
         setupActionBarWithNavController(navController, appBarConfig)
     }
 
@@ -75,5 +73,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 }

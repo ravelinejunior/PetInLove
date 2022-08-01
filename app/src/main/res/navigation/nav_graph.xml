@@ -32,8 +32,7 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out"
-            app:popUpTo="@id/mainActivity"
-            app:popUpToInclusive="true" />
+        />
     </fragment>
     <activity
         android:id="@+id/mainActivity"

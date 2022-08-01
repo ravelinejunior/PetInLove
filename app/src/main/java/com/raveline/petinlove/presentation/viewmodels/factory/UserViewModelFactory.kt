@@ -2,6 +2,7 @@ package com.raveline.petinlove.presentation.viewmodels.factory
 
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -16,11 +17,19 @@ class UserViewModelFactory @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth,
     private val storage: FirebaseStorage,
+    private val sharedPreferences: SharedPreferences,
     private val application: Application
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            return UserViewModel(userRepository, firestore, firebaseAuth,storage, application) as T
+            return UserViewModel(
+                userRepository,
+                firestore,
+                firebaseAuth,
+                storage,
+                sharedPreferences,
+                application
+            ) as T
         }
         throw IllegalArgumentException("Wrong class")
     }

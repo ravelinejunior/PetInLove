@@ -12,6 +12,7 @@ const val userFieldProfileImage = "profileImage"
 const val userFieldDescription = "description"
 const val userFieldId = "uid"
 const val userStorageReferenceImage = "UserImageProfile"
+const val firstRegisterUserImage = "https://firebasestorage.googleapis.com/v0/b/inpets-f546d.appspot.com/o/UserImageProfile%2Fprofile_empty_start.jpg?alt=media&token=b445ffd3-61fa-4bc5-8324-4b1ca7123b48"
 
 //Post Database Server
 const val postFirebaseDatabaseReference = "Posts"
@@ -28,4 +29,7 @@ const val postFieldImagePostedName = "imagePostedName"
 
 const val mediaStoreKeyProfileImage = 165164
 const val postStoreKeyProfileImage = 4455
+
+const val GLOBAL_SHARED_PREFS_KEY = "GlobalSharedKey"
+const val USER_SAVED_SHARED_PREF_KEY = "SavedUserSharedKey"
 
