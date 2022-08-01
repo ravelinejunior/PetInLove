@@ -1,6 +1,8 @@
 package com.raveline.petinlove.presentation.viewmodels
 
 import android.app.Application
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,9 +15,14 @@ import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.domain.repository_impl.PostRepositoryImpl
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.math.roundToInt
+
 
 class PostViewModel(
     private val postRepository: PostRepositoryImpl,
@@ -38,6 +45,64 @@ class PostViewModel(
             getUserData()
         }
 
+    }
+
+    fun savePostOnServer(
+        imageUri: Uri?,
+        extension: String,
+        description: String
+    ) = viewModelScope.launch(Main) {
+        try {
+            if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
+                _uiStateFlow.value = UiState.Loading
+                postRepository.postFirebaseStorageImageToPost(
+                    mUser!!,
+                    imageUri!!,
+                    extension,
+                    description
+                ).addOnSuccessListener { taskSnapshot ->
+
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { dImageUri ->
+                        if (dImageUri != null) {
+                            viewModelScope.launch(IO) {
+                                val user = mUser!!
+                                val postId = UUID.randomUUID().toString().replace("-", "").trim()
+                                val postMap = hashMapOf(
+                                    postFieldPostId to postId,
+                                    postFieldUserAuthorName to user.userName,
+                                    postFieldUserAuthorImage to user.userProfileImage,
+                                    postFieldLikes to 0,
+                                    postFieldAuthorId to user.uid,
+                                    postFieldDescription to description,
+                                    postFieldImagePath to dImageUri.toString(),
+                                    postFieldImagePostedName to extension
+                                )
+
+                                postRepository.setPostOnFirebaseServer(postId, postMap)
+                                    .addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            _uiStateFlow.value = UiState.Success
+                                        }
+                                    }.addOnFailureListener {
+                                        _uiStateFlow.value = UiState.Error
+                                    }
+                            }
+                        }
+                    }
+
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        _uiStateFlow.value = UiState.Success
+                    }
+                }.addOnFailureListener {
+                    _uiStateFlow.value = UiState.Error
+                }
+            } else {
+                _uiStateFlow.value = UiState.NoConnection
+            }
+        } catch (e: Exception) {
+            _uiStateFlow.value = UiState.Error
+        }
     }
 
     private fun getPostsFromServer() = viewModelScope.launch {
@@ -115,4 +180,6 @@ class PostViewModel(
             id = 0
         )
     }
+
+
 }

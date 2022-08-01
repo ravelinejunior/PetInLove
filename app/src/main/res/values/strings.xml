@@ -46,4 +46,8 @@
     <string name="post">Post</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
+    <string name="set_image_clicking_here">Set Image Clicking Here</string>
+    <string name="select_image_msg">Select Image</string>
+    <string name="successfully_add_post_msg">Post Successfully Added</string>
+    <string name="image_not_found_msg">You Must Select An Image First</string>
 </resources>

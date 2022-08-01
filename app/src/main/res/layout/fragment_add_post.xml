@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".presentation.fragments.AddPostFragment">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayoutAddPostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarAddPostFragment"
+                style="@android:style/Widget.Toolbar.Button.Navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:elevation="0dp"
+                app:navigationIcon="@drawable/ic_baseline_keyboard_backspace_24" />
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ImageView
+            android:id="@+id/ivAddPostFragment"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_300sdp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:elevation="@dimen/_10sdp"
+            android:layout_margin="@dimen/_4sdp"
+            android:src="@drawable/image_gallery_choose"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddPostFragment" />
+
+        <TextView
+            android:id="@+id/tvAddPostFragmentImage"
+            style="@style/CustomText.Bold.Header_Profile"
+            android:layout_width="0dp"
+            android:paddingVertical="@dimen/_16sdp"
+            android:layout_height="wrap_content"
+            android:text="@string/set_image_clicking_here"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAddPostFragment" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddPostFragmentImage">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputAddPostFragmentDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_value_item_card_button"
+                android:gravity="start"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                style="@style/CustomText.Bold.SubTitle_Card"
+                android:lines="5"
+                android:maxLines="10" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imageButtonAddPostFragmentSave"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_baseline_done_outline_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+
+

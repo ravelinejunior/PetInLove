@@ -10,10 +10,24 @@
         <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/layout/fragment_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/layout/fragment_main.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/layout/fragment_post.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/layout/fragment_signup.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/layout/item_home_adapter.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/junio/AndroidStudioProjects/PetInLove/app/src/main/res/menu/main_bottom_menu.xml" value="0.253125" />
+        <entry key="app/src/main/res/drawable/bg_login_button.xml" value="0.278" />
+        <entry key="app/src/main/res/drawable/bg_value_item_card_button.xml" value="0.278" />
+        <entry key="app/src/main/res/drawable/ic_baseline_mode_comment_24.xml" value="0.24" />
+        <entry key="app/src/main/res/drawable/ic_baseline_pets_transparent.xml" value="0.3395" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/fragment_add_post.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_analytics.xml" value="0.35733695652173914" />
+        <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.35733695652173914" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.35733695652173914" />
+        <entry key="app/src/main/res/layout/fragment_search_person.xml" value="0.3546875" />
+        <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/item_home_adapter.xml" value="0.36770833333333336" />
+        <entry key="app/src/main/res/layout/item_search_user_adapter.xml" value="0.3536458333333333" />
+        <entry key="app/src/main/res/menu/menu_home_fragment.xml" value="0.2609375" />
       </map>
     </option>
   </component>
