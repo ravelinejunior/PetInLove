@@ -19,11 +19,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.listener.UiState
+import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.databinding.FragmentAddPostBinding
 import com.raveline.petinlove.domain.utils.CustomDialogLoading
+import com.raveline.petinlove.domain.utils.SystemFunctions.hideKeyboard
 import com.raveline.petinlove.domain.utils.postStoreKeyProfileImage
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
+import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
+import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,7 +48,13 @@ class AddPostFragment : Fragment() {
     lateinit var postViewModelFactory: PostViewModelFactory
     private val postViewModel: PostViewModel by viewModels { postViewModelFactory }
 
+    @Inject
+    lateinit var userViewModelFactory: UserViewModelFactory
+    private val userViewModel: UserViewModel by viewModels { userViewModelFactory }
+
     private var imageUri: Uri? = null
+
+    private lateinit var user: UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +69,7 @@ class AddPostFragment : Fragment() {
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
+        user = userViewModel.getLoggedUserFromPref()!!
         navBar.visibility = View.GONE
     }
 
@@ -99,11 +109,12 @@ class AddPostFragment : Fragment() {
 
     private fun saveNewPost() {
         val description = binding.textInputAddPostFragmentDescription.text.toString()
+        hideKeyboard()
 
         if (imageUri != null) {
             lifecycleScope.launch {
                 val extension = "${System.currentTimeMillis()}.jpeg"
-                postViewModel.savePostOnServer(imageUri, extension, description)
+                postViewModel.savePostOnServer(user, imageUri, extension, description)
             }
         } else {
             Snackbar.make(
@@ -137,7 +148,10 @@ class AddPostFragment : Fragment() {
                             binding.root,
                             getString(R.string.successfully_add_post_msg),
                             Snackbar.LENGTH_SHORT
-                        ).show()
+                        ).show().run {
+                            navBar.visibility = View.VISIBLE
+                            findNavController().navigate(R.id.action_addPostFragment_to_homeFragment)
+                        }
                     }
 
                 }

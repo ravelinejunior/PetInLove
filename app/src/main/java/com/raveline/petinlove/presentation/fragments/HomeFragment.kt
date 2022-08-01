@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        initObservers()
+
         return binding.root
     }
 
@@ -73,6 +73,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupRecyclerView()
+        initObservers()
     }
 
     private fun setupToolbar() {
@@ -97,10 +98,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun initObservers() {
-        lifecycleScope.launchWhenStarted {
-            postViewModel.uiStateFlow.collectLatest { uiState ->
+
+        lifecycleScope.launch {
+            postViewModel.uiStateFlow.collect { uiState ->
                 when (uiState) {
-                    UiState.Initial -> {}
+                    UiState.Initial -> {
+                        postViewModel.getPostsFromServer()
+                    }
                     UiState.Loading -> {
                         CustomDialogLoading().startLoading(requireActivity())
                     }
@@ -121,7 +125,7 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            postViewModel.postsFlow.collectLatest { posts ->
+            postViewModel.postsFlow.collect { posts ->
                 if (posts.isNotEmpty()) {
                     homeAdapter.setData(posts)
                     setupRecyclerView()

@@ -1,11 +1,10 @@
 package com.raveline.petinlove.presentation.viewmodels
 
 import android.app.Application
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.roundToInt
 
 
 class PostViewModel(
@@ -38,16 +36,8 @@ class PostViewModel(
     private val _postsStateFlow = MutableStateFlow<List<PostModel>>(emptyList())
     val postsFlow: StateFlow<List<PostModel>> get() = _postsStateFlow
 
-    private var mUser: UserModel? = null
-
-    init {
-        viewModelScope.launch {
-            getUserData()
-        }
-
-    }
-
     fun savePostOnServer(
+        user: UserModel,
         imageUri: Uri?,
         extension: String,
         description: String
@@ -56,7 +46,7 @@ class PostViewModel(
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
                 _uiStateFlow.value = UiState.Loading
                 postRepository.postFirebaseStorageImageToPost(
-                    mUser!!,
+                    user,
                     imageUri!!,
                     extension,
                     description
@@ -65,7 +55,6 @@ class PostViewModel(
                     taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { dImageUri ->
                         if (dImageUri != null) {
                             viewModelScope.launch(IO) {
-                                val user = mUser!!
                                 val postId = UUID.randomUUID().toString().replace("-", "").trim()
                                 val postMap = hashMapOf(
                                     postFieldPostId to postId,
@@ -75,7 +64,8 @@ class PostViewModel(
                                     postFieldAuthorId to user.uid,
                                     postFieldDescription to description,
                                     postFieldImagePath to dImageUri.toString(),
-                                    postFieldImagePostedName to extension
+                                    postFieldImagePostedName to extension,
+                                    postFieldDatePosted to Timestamp(Date(System.currentTimeMillis()))
                                 )
 
                                 postRepository.setPostOnFirebaseServer(postId, postMap)
@@ -105,11 +95,10 @@ class PostViewModel(
         }
     }
 
-    private fun getPostsFromServer() = viewModelScope.launch {
+     fun getPostsFromServer() {
 
         try {
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
-                _uiStateFlow.value = UiState.Loading
                 getData()
             } else {
                 _uiStateFlow.value = UiState.NoConnection
@@ -120,6 +109,7 @@ class PostViewModel(
     }
 
     private fun getData() = viewModelScope.launch {
+        _uiStateFlow.value = UiState.Loading
         postRepository.getPostsFromServer(firebaseAuth.uid!!).addOnSuccessListener { docs ->
             if (!docs.isEmpty) {
                 val posts = arrayListOf<PostModel>()
@@ -130,7 +120,6 @@ class PostViewModel(
 
                 _postsStateFlow.value = posts
                 _uiStateFlow.value = UiState.Success
-                Log.i("TAGPostFlow", "$posts")
             } else {
                 _uiStateFlow.value = UiState.Error
             }
@@ -138,22 +127,6 @@ class PostViewModel(
             .addOnFailureListener {
                 _uiStateFlow.value = UiState.Error
             }
-    }
-
-    private fun getUserData() {
-        _uiStateFlow.value = UiState.Loading
-        viewModelScope.launch {
-            userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val result = task.result
-                        mUser = mapToUser(result)
-                        viewModelScope.launch {
-                            getPostsFromServer()
-                        }
-                    }
-                }
-        }
     }
 
     private fun mapToPost(result: DocumentSnapshot): PostModel {
@@ -165,21 +138,9 @@ class PostViewModel(
             imagePath = result[postFieldImagePath].toString(),
             description = result[postFieldDescription].toString(),
             likes = result[postFieldLikes].toString().toInt(),
+            dateCreated = result[postFieldDatePosted] as Timestamp,
             id = 0
         )
     }
-
-    private fun mapToUser(result: DocumentSnapshot): UserModel {
-        return UserModel(
-            uid = result[userFieldId].toString(),
-            userName = result[userFieldName].toString(),
-            userEmail = result[userFieldEmail].toString(),
-            userPhoneNumber = result[userFieldPhoneNumber].toString(),
-            userDescription = result[userFieldDescription].toString(),
-            userProfileImage = result[userFieldProfileImage].toString(),
-            id = 0
-        )
-    }
-
 
 }

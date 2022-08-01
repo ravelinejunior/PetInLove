@@ -26,6 +26,7 @@ const val postFieldAuthorId = "authorId"
 const val postFieldUserAuthorName = "userAuthorName"
 const val postFieldUserAuthorImage = "userAuthorImage"
 const val postFieldImagePostedName = "imagePostedName"
+const val postFieldDatePosted = "postDate"
 
 const val mediaStoreKeyProfileImage = 165164
 const val postStoreKeyProfileImage = 4455
