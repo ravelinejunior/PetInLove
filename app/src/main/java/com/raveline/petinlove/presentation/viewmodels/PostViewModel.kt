@@ -95,7 +95,7 @@ class PostViewModel(
         }
     }
 
-     fun getPostsFromServer() {
+    fun getPostsFromServer() {
 
         try {
             if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
@@ -131,7 +131,7 @@ class PostViewModel(
 
     private fun mapToPost(result: DocumentSnapshot): PostModel {
         return PostModel(
-            postId = result[postFieldUid].toString(),
+            postId = result[postFieldPostId].toString(),
             authorId = result[postFieldAuthorId].toString(),
             userAuthorName = result[postFieldUserAuthorName].toString(),
             userAuthorImage = result[postFieldUserAuthorImage].toString(),

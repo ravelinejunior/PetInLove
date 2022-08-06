@@ -22,6 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,9 +50,9 @@ class UserViewModel @Inject constructor(
 
     private fun getUserData() {
 
-        viewModelScope.launch {
+        runBlocking {
 
-            if (getLoggedUserFromPref() != null) return@launch
+            if (getLoggedUserFromPref() != null) return@runBlocking
             else {
                 userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
                     .addOnCompleteListener { task ->
@@ -232,8 +233,17 @@ class UserViewModel @Inject constructor(
                 userRepository.loginUserFromServer(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            _uiStateFlow.value = UiState.Success
-                            getUserData()
+
+                            val result = task.result
+                            viewModelScope.launch {
+                                userRepository.getUserDataFromServer(result.user!!.uid)
+                                    .addOnSuccessListener { doc ->
+                                        saveUserOnPrefs(mapToUser(doc))
+                                        getUserData()
+                                        _uiStateFlow.value = UiState.Success
+                                    }
+                            }
+
 
                         } else {
                             _uiStateFlow.value = UiState.Error

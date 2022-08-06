@@ -1,6 +1,8 @@
 package com.raveline.petinlove.data.model
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentSnapshot
+import com.raveline.petinlove.domain.utils.*
 
 
 data class PostModel(
@@ -14,3 +16,17 @@ data class PostModel(
     var likes: Int = 0,
     var dateCreated: Timestamp
 )
+
+fun mapToPost(result: DocumentSnapshot): PostModel {
+    return PostModel(
+        postId = result[postFieldPostId].toString(),
+        authorId = result[postFieldAuthorId].toString(),
+        userAuthorName = result[postFieldUserAuthorName].toString(),
+        userAuthorImage = result[postFieldUserAuthorImage].toString(),
+        imagePath = result[postFieldImagePath].toString(),
+        description = result[postFieldDescription].toString(),
+        likes = result[postFieldLikes].toString().toInt(),
+        dateCreated = result[postFieldDatePosted] as Timestamp,
+        id = 0
+    )
+}

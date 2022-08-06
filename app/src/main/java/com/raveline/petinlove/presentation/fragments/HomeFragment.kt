@@ -17,12 +17,13 @@ import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.databinding.FragmentHomeBinding
 import com.raveline.petinlove.domain.utils.CustomDialogLoading
 import com.raveline.petinlove.presentation.adapters.PostItemAdapter
+import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
+import com.raveline.petinlove.presentation.viewmodels.factory.LikesViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,8 +44,12 @@ class HomeFragment : Fragment() {
     lateinit var postViewModelFactory: PostViewModelFactory
     private val postViewModel: PostViewModel by viewModels { postViewModelFactory }
 
+    @Inject
+    lateinit var likesViewModelFactory: LikesViewModelFactory
+    private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
+
     private val homeAdapter: PostItemAdapter by lazy {
-        PostItemAdapter()
+        PostItemAdapter(likeViewModel, userViewModel)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
