@@ -9,12 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.listener.UiState
-import com.raveline.petinlove.databinding.FragmentHomeBinding
+import com.raveline.petinlove.data.model.UserModel
+import com.raveline.petinlove.databinding.FragmentProfileUserBinding
 import com.raveline.petinlove.domain.utils.CustomDialogLoading
 import com.raveline.petinlove.presentation.adapters.PostItemAdapter
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
@@ -28,13 +31,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class ProfileUserFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding: FragmentHomeBinding get() = _binding!!
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
+    private var _binding: FragmentProfileUserBinding? = null
+    private val binding: FragmentProfileUserBinding get() = _binding!!
 
     @Inject
     lateinit var userViewModelFactory: UserViewModelFactory
@@ -49,56 +49,62 @@ class HomeFragment : Fragment() {
     private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
 
     private val homeAdapter: PostItemAdapter by lazy {
-        PostItemAdapter(likeViewModel, userViewModel, fragment = requireParentFragment())
+        PostItemAdapter(likeViewModel, userViewModel, postViewModel)
     }
+
+    private lateinit var user: UserModel
+
+    private lateinit var navBar: BottomNavigationView
+
+    private val userId by navArgs<ProfileUserFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        navBar = requireActivity().findViewById(R.id.bnv_main_id)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    findNavController().navigate(R.id.action_profileUserFragment_to_homeFragment)
+                    navBar.visibility = View.VISIBLE
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
+        navBar.visibility = View.GONE
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileUserBinding.inflate(inflater, container, false)
 
+        binding.toolbarEditProfileFragment.setNavigationOnClickListener {
+            navBar.visibility = View.VISIBLE
+            findNavController().navigate(R.id.action_profileUserFragment_to_homeFragment)
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
-        setupRecyclerView()
         initObservers()
     }
 
-    private fun setupToolbar() {
-        binding.toolbarHomeFragment.apply {
-            inflateMenu(R.menu.menu_home_fragment)
-            title = "AuAuCome"
-            setOnMenuItemClickListener { item ->
 
-                when (item.itemId) {
-                    R.id.chatMenuHomeId -> {
+    private fun displayUserInfo() {
+        binding.apply {
+            textViewProfileUserFragmentFollowers.text = user.userFollowers.toString()
+            textViewProfileUserFragmentFollowing.text = user.userFollowing.toString()
+            textViewProfileUserFragmentDescription.text = user.userDescription
+            textViewProfileUserFragmentPublications.text = user.userPublications.toString()
+            Glide.with(requireContext()).load(user.userProfileImage)
+                .into(imageViewProfileUserFragment)
 
-                    }
-                    R.id.logoutMenuHomeId -> {
-                        userViewModel.logout().also {
-                            findNavController().navigate(R.id.action_homeFragment_to_homeActivity)
-                        }
-                    }
-                }
-                true
-            }
+            toolbarEditProfileFragment.title = user.userName
         }
     }
 
@@ -109,6 +115,28 @@ class HomeFragment : Fragment() {
                 when (uiState) {
                     UiState.Initial -> {
                         postViewModel.getPostsFromServer()
+                    }
+                    UiState.Loading -> {
+                    }
+                    UiState.Error -> {
+                        Snackbar.make(
+                            binding.root,
+                            getString(R.string.something_wrong_msg),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    UiState.Success -> {
+                    }
+
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            userViewModel.uiUserProfileStateFlow.collect { userState ->
+                when (userState) {
+                    UiState.Initial -> {
+                        userViewModel.getUserById(userId.userId)
                     }
                     UiState.Loading -> {
                         CustomDialogLoading().startLoading(requireActivity())
@@ -123,30 +151,36 @@ class HomeFragment : Fragment() {
                     }
                     UiState.Success -> {
                         CustomDialogLoading().dismissLoading()
+                        user = userViewModel.userProfileFlow.value!!
+
+                        lifecycleScope.launch {
+                            postViewModel.postsFlow.collect { posts ->
+                                if (posts.isNotEmpty()) {
+                                    homeAdapter.getPostsById(user.uid)
+                                    setupRecyclerView()
+                                }
+
+                            }
+
+                        }
+                        displayUserInfo()
+
                     }
 
                 }
             }
         }
 
-        lifecycleScope.launch {
-            postViewModel.postsFlow.collect { posts ->
-                if (posts.isNotEmpty()) {
-                    homeAdapter.setData(posts)
-                    setupRecyclerView()
-                }
-            }
-        }
+
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerViewHomeFragment.apply {
+        binding.recyclerViewProfileUserFragmentPublications.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = homeAdapter
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

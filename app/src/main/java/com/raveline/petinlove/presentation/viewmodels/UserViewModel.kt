@@ -22,7 +22,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,8 +37,14 @@ class UserViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
 
+    private val _uiUserProfileStateFlow = MutableStateFlow<UiState>(UiState.Initial)
+    val uiUserProfileStateFlow: StateFlow<UiState> get() = _uiUserProfileStateFlow
+
     private val _userFlow = MutableStateFlow<UserModel?>(null)
     val userModel: StateFlow<UserModel?> get() = _userFlow
+
+    private val _userProfileFlow = MutableStateFlow<UserModel?>(null)
+    val userProfileFlow: StateFlow<UserModel?> get() = _userProfileFlow
 
     private val _userListFlow = MutableLiveData<List<UserModel>>()
     val userListModel: LiveData<List<UserModel>> get() = _userListFlow
@@ -50,9 +55,9 @@ class UserViewModel @Inject constructor(
 
     private fun getUserData() {
 
-        runBlocking {
+        viewModelScope.launch {
 
-            if (getLoggedUserFromPref() != null) return@runBlocking
+            if (getLoggedUserFromPref() != null) return@launch
             else {
                 userRepository.getUserDataFromServer(firebaseAuth.uid.toString())
                     .addOnCompleteListener { task ->
@@ -68,6 +73,25 @@ class UserViewModel @Inject constructor(
 
         }
     }
+
+     fun getUserById(userId: String) = viewModelScope.launch {
+         if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
+             _uiUserProfileStateFlow.value = UiState.Loading
+             userRepository.getUserDataFromServer(userId).addOnSuccessListener { doc ->
+                 if (doc != null) {
+                     val user = mapToUser(doc)
+                     _userProfileFlow.value = user
+                     _uiUserProfileStateFlow.value = UiState.Success
+                 }else{
+                     _uiUserProfileStateFlow.value = UiState.Error
+                 }
+             }
+         } else {
+             _uiUserProfileStateFlow.value = UiState.NoConnection
+         }
+
+     }
+
 
     fun getSearchedUsers(name: String = "") = viewModelScope.launch {
         if (SystemFunctions.isNetworkAvailable(application.baseContext)) {

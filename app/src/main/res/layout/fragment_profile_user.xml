@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.fragments.ProfileUserFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutProfileUserFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarEditProfileFragment"
+            style="@android:style/Widget.Toolbar.Button.Navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:elevation="0dp"
+            app:navigationIcon="@drawable/ic_baseline_keyboard_backspace_24" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewProfileUserFragment"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_margin="@dimen/_16sdp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutProfileUserFragment" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentPublications"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/_21"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProfileUserFragment"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileUserFragmentPublicationText"
+        app:layout_constraintStart_toEndOf="@+id/imageViewProfileUserFragment"
+        app:layout_constraintTop_toTopOf="@+id/imageViewProfileUserFragment" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentPublicationText"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/publications"
+        app:layout_constraintStart_toEndOf="@+id/imageViewProfileUserFragment"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileUserFragmentPublications" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentFollowers"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_69"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewProfileUserFragmentPublications"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileUserFragmentFollowersText"
+        app:layout_constraintStart_toStartOf="@+id/textViewProfileUserFragmentFollowersText"
+        app:layout_constraintTop_toTopOf="@+id/textViewProfileUserFragmentPublications" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentFollowersText"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:text="@string/followers"
+        app:layout_constraintEnd_toStartOf="@+id/textViewProfileUserFragmentFollowingText"
+        app:layout_constraintStart_toEndOf="@+id/textViewProfileUserFragmentPublicationText"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileUserFragmentFollowers" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentFollowing"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_125"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewProfileUserFragmentFollowers"
+        app:layout_constraintEnd_toEndOf="@+id/textViewProfileUserFragmentFollowingText"
+        app:layout_constraintStart_toStartOf="@+id/textViewProfileUserFragmentFollowingText"
+        app:layout_constraintTop_toTopOf="@+id/textViewProfileUserFragmentFollowers" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentFollowingText"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/following"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileUserFragmentFollowing" />
+
+    <TextView
+        android:id="@+id/textViewProfileUserFragmentDescription"
+        style="@style/CustomText.Bold.Header_Profile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_8sdp"
+        android:text="@string/lorem_ipsum_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileUserFragment" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewProfileUserFragmentPublications"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewProfileUserFragmentDescription"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_home_adapter" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

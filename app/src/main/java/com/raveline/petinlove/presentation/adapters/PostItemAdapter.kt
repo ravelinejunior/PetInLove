@@ -2,7 +2,9 @@ package com.raveline.petinlove.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -14,6 +16,7 @@ import com.raveline.petinlove.data.model.mapToPost
 import com.raveline.petinlove.databinding.ItemHomeAdapterBinding
 import com.raveline.petinlove.domain.utils.ListDiffUtil
 import com.raveline.petinlove.domain.utils.postFieldAuthorId
+import com.raveline.petinlove.presentation.fragments.HomeFragmentDirections
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
@@ -23,6 +26,7 @@ class PostItemAdapter(
     private val likeViewModel: LikeViewModel,
     private val userViewModel: UserViewModel,
     private val postViewModel: PostViewModel? = null,
+    private val fragment: Fragment? = null
 ) : RecyclerView.Adapter<PostItemAdapter.MyViewHolder>() {
 
     private var postList = listOf<PostModel>()
@@ -68,7 +72,20 @@ class PostItemAdapter(
                 textViewAdapterHomeDescriptionUserPost.text = post.description
                 textViewAdapterHomeUserNamePost.text = post.userAuthorName
 
+                if (fragment != null) {
+                    imageViewAdapterHomeProfileImagePost.setOnClickListener {
+                        goToProfileAuthor(post.authorId)
+                    }
+                }
+
             }
+        }
+
+        private fun goToProfileAuthor(profileId: String) {
+            val navController = Navigation.findNavController(binding.root)
+            val directions =
+                HomeFragmentDirections.actionHomeFragmentToProfileUserFragment(profileId)
+            navController.navigate(directions)
         }
 
         fun changeLikeStatus(post: PostModel) {
