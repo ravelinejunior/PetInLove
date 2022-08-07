@@ -2,6 +2,7 @@ package com.raveline.petinlove.domain.repository_impl
 
 import android.net.Uri
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -44,6 +45,10 @@ class PostRepositoryImpl @Inject constructor(
     ): Task<Void> {
         return fireStore.collection(postFirebaseDatabaseReference)
             .document(postId).set(postMap)
+    }
+
+    override suspend fun getPostsById(): CollectionReference {
+        return fireStore.collection(postFirebaseDatabaseReference)
     }
 
 }

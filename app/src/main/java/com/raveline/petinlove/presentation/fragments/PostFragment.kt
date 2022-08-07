@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -41,16 +39,16 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            tvPostFragmentGallery.setOnClickListener{
+            tvPostFragmentGallery.setOnClickListener {
                 findNavController().navigate(R.id.action_postFragment_to_addPostFragment)
             }
-            tvPostFragmentCamera.setOnClickListener{
+            tvPostFragmentCamera.setOnClickListener {
                 findNavController().navigate(R.id.action_postFragment_to_addPostFragment)
             }
-            ivPostFragmentCamera.setOnClickListener{
+            ivPostFragmentCamera.setOnClickListener {
                 findNavController().navigate(R.id.action_postFragment_to_addPostFragment)
             }
-            ivPostFragmentGallery.setOnClickListener{
+            ivPostFragmentGallery.setOnClickListener {
                 findNavController().navigate(R.id.action_postFragment_to_addPostFragment)
             }
         }
@@ -60,6 +58,6 @@ class PostFragment : Fragment() {
         super.onDestroy()
         _binding = null
 
-}
+    }
 
 }

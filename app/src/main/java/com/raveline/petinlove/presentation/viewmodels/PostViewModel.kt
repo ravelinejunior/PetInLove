@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raveline.petinlove.data.listener.UiState
@@ -127,6 +128,10 @@ class PostViewModel(
             .addOnFailureListener {
                 _uiStateFlow.value = UiState.Error
             }
+    }
+
+    suspend fun getPostsById():CollectionReference{
+        return postRepository.getPostsById()
     }
 
     private fun mapToPost(result: DocumentSnapshot): PostModel {

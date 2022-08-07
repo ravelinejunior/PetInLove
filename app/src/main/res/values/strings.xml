@@ -50,4 +50,5 @@
     <string name="select_image_msg">Select Image</string>
     <string name="successfully_add_post_msg">Post Successfully Added</string>
     <string name="image_not_found_msg">You Must Select An Image First</string>
+    <string name="_125">125</string>
 </resources>

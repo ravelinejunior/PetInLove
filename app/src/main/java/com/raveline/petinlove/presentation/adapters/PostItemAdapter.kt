@@ -10,15 +10,19 @@ import com.bumptech.glide.Glide
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.model.PostModel
 import com.raveline.petinlove.data.model.UserModel
+import com.raveline.petinlove.data.model.mapToPost
 import com.raveline.petinlove.databinding.ItemHomeAdapterBinding
 import com.raveline.petinlove.domain.utils.ListDiffUtil
+import com.raveline.petinlove.domain.utils.postFieldAuthorId
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
+import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
 
 class PostItemAdapter(
     private val likeViewModel: LikeViewModel,
-    private val userViewModel: UserViewModel
+    private val userViewModel: UserViewModel,
+    private val postViewModel: PostViewModel? = null,
 ) : RecyclerView.Adapter<PostItemAdapter.MyViewHolder>() {
 
     private var postList = listOf<PostModel>()
@@ -77,7 +81,7 @@ class PostItemAdapter(
 
         fun changeDisplay(post: PostModel) {
             likeViewModel.viewModelScope.launch {
-                likeViewModel.checkIsLiked(post)?.addSnapshotListener { value, error ->
+                likeViewModel.checkIsLiked(post).addSnapshotListener { value, error ->
                     if (value != null) {
                         binding.apply {
                             if (value.contains(user.uid)) {
@@ -96,6 +100,24 @@ class PostItemAdapter(
 
         }
 
+    }
+
+    fun getPostsById(userId: String) {
+        postViewModel?.viewModelScope?.launch {
+            postViewModel.getPostsById().addSnapshotListener { docs, error ->
+                if (docs != null) {
+                    val arrayPost: ArrayList<PostModel> = arrayListOf()
+                    for (doc in docs.documents) {
+                        if (doc.data!![postFieldAuthorId] == userId)
+                            arrayPost.add(mapToPost(doc))
+                    }
+                    setData(arrayPost)
+                } else {
+                    setData(emptyList())
+                }
+
+            }
+        }
     }
 
     fun setData(posts: List<PostModel>) {
