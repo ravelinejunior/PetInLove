@@ -72,12 +72,17 @@ class PostItemAdapter(
                 textViewAdapterHomeDescriptionUserPost.text = post.description
                 textViewAdapterHomeUserNamePost.text = post.userAuthorName
 
-                if (fragment != null) {
+                if (user.uid == post.authorId) {
                     imageViewAdapterHomeProfileImagePost.setOnClickListener {
-                        goToProfileAuthor(post.authorId)
+                        goToMyProfile()
+                    }
+                }else{
+                    if (fragment != null) {
+                        imageViewAdapterHomeProfileImagePost.setOnClickListener {
+                            goToProfileAuthor(post.authorId)
+                        }
                     }
                 }
-
             }
         }
 
@@ -86,6 +91,11 @@ class PostItemAdapter(
             val directions =
                 HomeFragmentDirections.actionHomeFragmentToProfileUserFragment(profileId)
             navController.navigate(directions)
+        }
+
+        private fun goToMyProfile() {
+            val navController = Navigation.findNavController(binding.root)
+            navController.navigate(R.id.action_homeFragment_to_profileFragment)
         }
 
         fun changeLikeStatus(post: PostModel) {
