@@ -23,8 +23,7 @@ class LikeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _isLikedFlow = MutableStateFlow(false)
-    val likedFlow: StateFlow<Boolean> get() = _isLikedFlow
-
+    private val likedFlow: StateFlow<Boolean> get() = _isLikedFlow
 
     private fun setLike(postModel: PostModel, like: Int) = viewModelScope.launch {
         val user = SystemFunctions.getLoggedUserFromPref(sharedPref)!!

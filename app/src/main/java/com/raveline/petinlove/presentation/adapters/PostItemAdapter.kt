@@ -43,6 +43,7 @@ class PostItemAdapter(
         holder.bindPost(post)
         holder.changeLikeStatus(post)
         holder.changeDisplay(post)
+
     }
 
     override fun getItemCount(): Int = postList.size
@@ -76,7 +77,7 @@ class PostItemAdapter(
                     imageViewAdapterHomeProfileImagePost.setOnClickListener {
                         goToMyProfile()
                     }
-                }else{
+                } else {
                     if (fragment != null) {
                         imageViewAdapterHomeProfileImagePost.setOnClickListener {
                             goToProfileAuthor(post.authorId)
@@ -84,6 +85,18 @@ class PostItemAdapter(
                     }
                 }
             }
+
+            binding.imageViewAdapterHomeMainImagePost.setOnClickListener {
+                goToPostDetail(post)
+            }
+
+        }
+
+        private fun goToPostDetail(post: PostModel) {
+            val navController = Navigation.findNavController(binding.root)
+            val directions =
+                HomeFragmentDirections.actionHomeFragmentToPostDetailFragment(post, user.uid)
+            navController.navigate(directions)
         }
 
         private fun goToProfileAuthor(profileId: String) {

@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    requireActivity().finish()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)

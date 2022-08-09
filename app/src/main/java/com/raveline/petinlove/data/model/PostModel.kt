@@ -3,6 +3,7 @@ package com.raveline.petinlove.data.model
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.raveline.petinlove.domain.utils.*
+import java.io.Serializable
 
 
 data class PostModel(
@@ -15,7 +16,7 @@ data class PostModel(
     var imagePath: String,
     var likes: Int = 0,
     var dateCreated: Timestamp
-)
+) : Serializable
 
 fun mapToPost(result: DocumentSnapshot): PostModel {
     return PostModel(
