@@ -93,7 +93,7 @@ class HomeFragment : Fragment() {
                     }
                     R.id.logoutMenuHomeId -> {
                         userViewModel.logout().also {
-                            findNavController().navigate(R.id.action_homeFragment_to_homeActivity)
+                            findNavController().navigate(R.id.action_homeFragment_to_mainFragment)
                         }
                     }
                 }

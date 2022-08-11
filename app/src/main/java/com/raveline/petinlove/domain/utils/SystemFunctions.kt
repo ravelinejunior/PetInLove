@@ -18,9 +18,12 @@ import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.Timestamp
 import com.google.gson.Gson
 import com.raveline.petinlove.data.model.UserModel
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object SystemFunctions {
@@ -107,6 +110,11 @@ object SystemFunctions {
             val gson = Gson()
             return gson.fromJson(userJson, UserModel::class.java)
         } else return null
+    }
+
+    fun convertTimeStampToString(date: Date): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy 'às' hh:mm a", Locale.getDefault())
+        return sdf.format(date)
     }
 
 }

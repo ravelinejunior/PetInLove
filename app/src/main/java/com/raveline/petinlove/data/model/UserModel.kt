@@ -2,6 +2,7 @@ package com.raveline.petinlove.data.model
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.raveline.petinlove.domain.utils.*
+import java.io.Serializable
 
 data class UserModel(
     val id: Int = 0,
@@ -14,7 +15,7 @@ data class UserModel(
     var userFollowing: Int = 0,
     var userFollowers: Int = 0,
     var userPublications: Int = 0,
-)
+) : Serializable
 
 fun hashMapToUserModel(result: DocumentSnapshot): UserModel {
 
@@ -32,7 +33,7 @@ fun hashMapToUserModel(result: DocumentSnapshot): UserModel {
     )
 }
 
- fun userToMap(userModel: UserModel): HashMap<String, String> {
+fun userToMap(userModel: UserModel): HashMap<String, String> {
     return hashMapOf(
         userFieldId to userModel.uid,
         userFieldName to userModel.userName,

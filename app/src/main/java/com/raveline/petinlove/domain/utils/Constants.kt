@@ -37,6 +37,17 @@ const val postFieldDatePosted = "postDate"
 const val likeFirebaseDatabaseReference = "Likes"
 const val likeFieldIsLiked = "isLiked"
 
+//Comments Database Server
+const val commentFirebaseDatabaseReference = "Comments"
+const val commentFirebaseSubNodeDatabaseReference = "Comment"
+const val commentFieldIdPost = "postId"
+const val commentFieldUserName = "name"
+const val commentFieldCommentId = "idComment"
+const val commentFieldUserId = "authorId"
+const val commentFieldComment = "comment"
+const val commentFieldUserProfileImage = "profileImage"
+const val commentFieldDataCreation = "dateCreated"
+
 const val mediaStoreKeyProfileImage = 165164
 const val postStoreKeyProfileImage = 4455
 

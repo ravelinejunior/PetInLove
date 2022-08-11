@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_8sdp"
+    >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivCommentsAdapterProfileImage"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
-        android:scaleType="centerCrop"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:src="@tools:sample/backgrounds/scenic"
-        app:layout_constraintBottom_toBottomOf="@+id/tvCommentsAdapterDateCreated"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,9 +22,9 @@
         android:id="@+id/tvCommentsAdapterUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintStart_toStartOf="@+id/tvCommentsAdapterComment"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Franklin Henrique" />
@@ -33,8 +34,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_8sdp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivCommentsAdapterProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/tvCommentsAdapterUserName"
         tools:text="@string/lorem_ipsum_desc" />
@@ -43,11 +44,15 @@
         android:id="@+id/tvCommentsAdapterDateCreated"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
         android:fontFamily="@font/lato"
+        android:textAlignment="textEnd"
+        android:textColor="@color/black"
+        android:textSize="12sp"
         android:textStyle="bold"
-        tools:text="20/12/2022 às 12:55:59"
-        app:layout_constraintEnd_toEndOf="@+id/tvCommentsAdapterComment"
-        app:layout_constraintStart_toStartOf="@+id/tvCommentsAdapterComment"
-        app:layout_constraintTop_toBottomOf="@+id/tvCommentsAdapterComment" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCommentsAdapterUserName"
+        app:layout_constraintTop_toTopOf="@+id/tvCommentsAdapterUserName"
+        tools:text="20/12/2022 às 12:55:59" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -90,6 +90,16 @@ class PostItemAdapter(
                 goToPostDetail(post)
             }
 
+            binding.imageViewAdapterHomeCommentariesPost.setOnClickListener {
+                goToComments(post)
+            }
+
+        }
+
+        private fun goToComments(post: PostModel) {
+            val navController = Navigation.findNavController(binding.root)
+            val directions = HomeFragmentDirections.actionHomeFragmentToCommentFragment(user, post)
+            navController.navigate(directions)
         }
 
         private fun goToPostDetail(post: PostModel) {

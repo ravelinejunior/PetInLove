@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
         binding.apply {
             textViewProfileFragmentSignOut.setOnClickListener {
                 userViewModel.logout().also {
-                    findNavController().navigate(R.id.action_profileFragment_to_homeActivity)
+                    findNavController().navigate(R.id.action_profileFragment_to_mainFragment)
                 }
             }
 

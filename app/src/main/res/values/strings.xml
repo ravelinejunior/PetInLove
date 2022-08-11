@@ -52,4 +52,6 @@
     <string name="image_not_found_msg">You Must Select An Image First</string>
     <string name="_125">125</string>
     <string name="add_a_cute_comment_here">Add a cute comment here</string>
+    <string name="comment_error_message">Your commentary was not posted. Try again!</string>
+    <string name="comments_string_title">Comments</string>
 </resources>
