@@ -39,6 +39,13 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_profileFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/analyticsFragment"
@@ -183,6 +190,9 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_profileUserFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/postDetailFragment"
@@ -223,8 +233,10 @@
             app:destination="@id/profileFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
+            app:launchSingleTop="true"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+
     </fragment>
     <fragment
         android:id="@+id/commentFragment"
@@ -260,49 +272,58 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
         <action
-            android:id="@+id/action_mainFragment_to_signupFragment2"
+            android:id="@+id/action_mainFragment_to_signupFragment"
             app:destination="@id/signupFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            />
+            app:popExitAnim="@android:anim/fade_out" />
         <action
-            android:id="@+id/action_mainFragment_to_loginFragment2"
+            android:id="@+id/action_mainFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            />
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.raveline.petinlove.presentation.fragments.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_mainFragment2"
+            android:id="@+id/action_loginFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            />
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/signupFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.raveline.petinlove.presentation.fragments.SignupFragment"
         android:label="SignupFragment"
-        tools:layout="@layout/fragment_signup"
-        >
+        tools:layout="@layout/fragment_signup">
         <action
-            android:id="@+id/action_signupFragment_to_mainFragment2"
+            android:id="@+id/action_signupFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            />
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
 </navigation>

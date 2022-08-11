@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.databinding.FragmentMainBinding
@@ -21,10 +22,14 @@ class MainFragment : Fragment() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
-
+    private var navBar: BottomNavigationView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        try {
+            navBar = requireActivity().findViewById(R.id.bnv_main_id)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -64,6 +69,10 @@ class MainFragment : Fragment() {
             if (firebaseAuth.currentUser != null) {
                 findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
             }
+        }
+
+        if(navBar != null){
+            navBar?.visibility = View.GONE
         }
     }
 

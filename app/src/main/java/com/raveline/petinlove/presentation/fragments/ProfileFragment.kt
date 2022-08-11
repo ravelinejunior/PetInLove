@@ -55,7 +55,7 @@ class ProfileFragment : Fragment() {
     private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
 
     private val homeAdapter: PostItemAdapter by lazy {
-        PostItemAdapter(likeViewModel, userViewModel, postViewModel)
+        PostItemAdapter(likeViewModel, userViewModel, postViewModel,this)
     }
 
 
@@ -88,6 +88,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             textViewProfileFragmentSignOut.setOnClickListener {
+                navBar.visibility = View.GONE
                 userViewModel.logout().also {
                     findNavController().navigate(R.id.action_profileFragment_to_mainFragment)
                 }

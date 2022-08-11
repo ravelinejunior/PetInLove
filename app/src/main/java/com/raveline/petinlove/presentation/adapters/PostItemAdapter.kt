@@ -16,7 +16,7 @@ import com.raveline.petinlove.data.model.mapToPost
 import com.raveline.petinlove.databinding.ItemHomeAdapterBinding
 import com.raveline.petinlove.domain.utils.ListDiffUtil
 import com.raveline.petinlove.domain.utils.postFieldAuthorId
-import com.raveline.petinlove.presentation.fragments.HomeFragmentDirections
+import com.raveline.petinlove.presentation.fragments.*
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
@@ -30,7 +30,7 @@ class PostItemAdapter(
 ) : RecyclerView.Adapter<PostItemAdapter.MyViewHolder>() {
 
     private var postList = listOf<PostModel>()
-    private val user: UserModel = userViewModel.getLoggedUserFromPref()!!
+    private lateinit var user: UserModel
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =
@@ -51,6 +51,7 @@ class PostItemAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindPost(post: PostModel) {
+            user = userViewModel.getLoggedUserFromPref()!!
             binding.apply {
                 val circular =
                     CircularProgressDrawable(imageViewAdapterHomeMainImagePost.context).apply {
@@ -98,15 +99,63 @@ class PostItemAdapter(
 
         private fun goToComments(post: PostModel) {
             val navController = Navigation.findNavController(binding.root)
-            val directions = HomeFragmentDirections.actionHomeFragmentToCommentFragment(user, post)
-            navController.navigate(directions)
+
+            when (fragment) {
+                is ProfileUserFragment -> {
+                    val directions =
+                        ProfileUserFragmentDirections.actionProfileUserFragmentToCommentFragment(
+                            user,
+                            post
+                        )
+                    navController.navigate(directions)
+                }
+                is ProfileFragment -> {
+                    val directions =
+                        ProfileFragmentDirections.actionProfileFragmentToCommentFragment(user, post)
+                    navController.navigate(directions)
+                }
+                is HomeFragment -> {
+                    val directions =
+                        HomeFragmentDirections.actionHomeFragmentToCommentFragment(user, post)
+                    navController.navigate(directions)
+                }
+
+                is PostDetailFragment -> {
+                    val directions =
+                        PostDetailFragmentDirections.actionPostDetailFragmentToCommentFragment(
+                            user,
+                            post
+                        )
+                    navController.navigate(directions)
+                }
+            }
         }
 
         private fun goToPostDetail(post: PostModel) {
+
             val navController = Navigation.findNavController(binding.root)
-            val directions =
-                HomeFragmentDirections.actionHomeFragmentToPostDetailFragment(post, user.uid)
-            navController.navigate(directions)
+
+            when (fragment) {
+                is ProfileFragment -> {
+                    val directions =
+                        ProfileFragmentDirections.actionProfileFragmentToPostDetailFragment(
+                            post,
+                            user.uid
+                        )
+                    navController.navigate(directions)
+                }
+
+                is HomeFragment -> {
+                    val directions =
+                        HomeFragmentDirections.actionHomeFragmentToPostDetailFragment(
+                            post,
+                            user.uid
+                        )
+                    navController.navigate(directions)
+                }
+            }
+
+
         }
 
         private fun goToProfileAuthor(profileId: String) {

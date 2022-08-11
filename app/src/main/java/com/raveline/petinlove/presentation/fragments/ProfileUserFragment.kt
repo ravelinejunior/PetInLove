@@ -49,7 +49,7 @@ class ProfileUserFragment : Fragment() {
     private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
 
     private val homeAdapter: PostItemAdapter by lazy {
-        PostItemAdapter(likeViewModel, userViewModel, postViewModel)
+        PostItemAdapter(likeViewModel, userViewModel, postViewModel, this)
     }
 
     private lateinit var user: UserModel

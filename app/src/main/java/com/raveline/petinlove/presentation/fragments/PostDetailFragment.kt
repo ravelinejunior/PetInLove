@@ -87,13 +87,31 @@ class PostDetailFragment : Fragment() {
         }
 
         binding.toolbarPostDetailTopFragment.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_postDetailFragment_to_homeFragment)
+            findNavController().popBackStack()
+            navBar.visibility = View.VISIBLE
+        }
+
+        binding.imageViewPostDetailProfileImagePost.setOnClickListener {
+            navigateToProfile()
+        }
+
+
+    }
+
+    private fun navigateToProfile() {
+        if (post.authorId != user.uid) {
+            val direction =
+                PostDetailFragmentDirections.actionPostDetailFragmentToProfileUserFragment(post.authorId)
+            findNavController().navigate(direction)
+        } else {
+            val direction =
+                PostDetailFragmentDirections.actionPostDetailFragmentToProfileFragment()
+            findNavController().navigate(direction)
             navBar.visibility = View.VISIBLE
         }
     }
 
     private fun initObservers() {
-
         lifecycleScope.launch {
             userViewModel.uiUserProfileStateFlow.collect { userState ->
                 when (userState) {
@@ -150,6 +168,16 @@ class PostDetailFragment : Fragment() {
             textViewPostDetailNameUserPost.text = post.userAuthorName
             textViewPostDetailDescriptionUserPost.text = post.description
             textViewPostDetailUserNamePost.text = post.userAuthorName
+
+            imageViewPostDetailCommentariesPost.setOnClickListener {
+                val directions =
+                    PostDetailFragmentDirections.actionPostDetailFragmentToCommentFragment(
+                        user,
+                        post
+                    )
+
+                findNavController().navigate(directions)
+            }
 
             toolbarPostDetailTopFragment.title = user.userName
 

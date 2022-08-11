@@ -49,15 +49,16 @@ class HomeFragment : Fragment() {
     private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
 
     private val homeAdapter: PostItemAdapter by lazy {
-        PostItemAdapter(likeViewModel, userViewModel, fragment = requireParentFragment())
+        PostItemAdapter(likeViewModel, userViewModel, fragment = this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    requireActivity().finish()
+
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
