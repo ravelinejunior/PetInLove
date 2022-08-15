@@ -36,6 +36,8 @@ const val postFieldDatePosted = "postDate"
 //Likes Database Server
 const val likeFirebaseDatabaseReference = "Likes"
 const val likeFieldIsLiked = "isLiked"
+const val savedPostFirebaseDatabaseReference = "SavedPosts"
+const val savedPostDocumentField = "Saved"
 
 //Comments Database Server
 const val commentFirebaseDatabaseReference = "Comments"

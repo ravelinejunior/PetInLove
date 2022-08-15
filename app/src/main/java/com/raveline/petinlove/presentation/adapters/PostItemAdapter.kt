@@ -9,18 +9,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.google.firebase.Timestamp
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.model.PostModel
 import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.data.model.mapToPost
 import com.raveline.petinlove.databinding.ItemHomeAdapterBinding
-import com.raveline.petinlove.domain.utils.ListDiffUtil
-import com.raveline.petinlove.domain.utils.postFieldAuthorId
+import com.raveline.petinlove.domain.utils.*
 import com.raveline.petinlove.presentation.fragments.*
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class PostItemAdapter(
     private val likeViewModel: LikeViewModel,
@@ -94,6 +95,26 @@ class PostItemAdapter(
             binding.imageViewAdapterHomeCommentariesPost.setOnClickListener {
                 goToComments(post)
             }
+
+            binding.imageViewAdapterHomeSavePost.setOnClickListener {
+                setSavedPost(post)
+            }
+
+        }
+
+        private fun setSavedPost(post: PostModel) {
+
+            val postMap: HashMap<String, Any> = hashMapOf(
+                postFieldPostId to post.postId,
+                postFieldUserAuthorName to user.userName,
+                postFieldUserAuthorImage to user.userProfileImage,
+                postFieldLikes to post.likes,
+                postFieldAuthorId to user.uid,
+                postFieldDescription to post.description,
+                postFieldImagePath to post.imagePath,
+                postFieldDatePosted to Timestamp(Date(System.currentTimeMillis()))
+            )
+            likeViewModel.setSave(post.postId, user, postMap)
 
         }
 
