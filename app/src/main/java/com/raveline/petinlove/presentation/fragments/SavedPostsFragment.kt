@@ -78,6 +78,7 @@ class SavedPostsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbarSavedPostFragment.title = getString(R.string.saved_posts)
         setupRecyclerView()
     }
 

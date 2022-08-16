@@ -14,18 +14,20 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.PostModel
 import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.databinding.FragmentPostDetailBinding
-import com.raveline.petinlove.domain.utils.CustomDialogLoading
+import com.raveline.petinlove.domain.utils.*
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.LikesViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 
@@ -82,7 +84,13 @@ class PostDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.imageViewPostDetailLikePost.setOnClickListener {
             lifecycleScope.launch {
-                changeLikeStatus(post)
+                changeLikeStatus()
+            }
+        }
+
+        binding.imageViewPostDetailSavePost.setOnClickListener {
+            lifecycleScope.launch {
+                changeSavedStatus()
             }
         }
 
@@ -198,10 +206,39 @@ class PostDetailFragment : Fragment() {
                 error?.printStackTrace()
             }
         }
+
+        likeViewModel.checkIsSaved(post, args.userId).addSnapshotListener { doc, error ->
+            if (doc?.exists() == true) {
+                binding.apply {
+                    imageViewPostDetailSavePost.setBackgroundResource(R.drawable.ic_baseline_turned_in_24)
+                }
+            } else {
+                binding.apply {
+                    imageViewPostDetailSavePost.setBackgroundResource(R.drawable.ic_baseline_turned_in_not_24)
+                }
+            }
+
+            error?.printStackTrace()
+        }
     }
 
-    private suspend fun changeLikeStatus(post: PostModel) {
+    private fun changeLikeStatus() {
         likeViewModel.getNumberLikes(post)
-        verifyColor()
+    }
+
+    private fun changeSavedStatus() {
+
+        val postMap: HashMap<String, Any> = hashMapOf(
+            postFieldPostId to post.postId,
+            postFieldUserAuthorName to user.userName,
+            postFieldUserAuthorImage to user.userProfileImage,
+            postFieldLikes to post.likes,
+            postFieldAuthorId to user.uid,
+            postFieldDescription to post.description,
+            postFieldImagePath to post.imagePath,
+            postFieldDatePosted to Timestamp(Date(System.currentTimeMillis()))
+        )
+
+        likeViewModel.setOrRemoveSavePost(post, user, postMap)
     }
 }

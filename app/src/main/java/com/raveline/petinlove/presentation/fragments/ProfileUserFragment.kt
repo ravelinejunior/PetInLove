@@ -171,7 +171,6 @@ class ProfileUserFragment : Fragment() {
             }
         }
 
-
     }
 
     private fun setupRecyclerView() {

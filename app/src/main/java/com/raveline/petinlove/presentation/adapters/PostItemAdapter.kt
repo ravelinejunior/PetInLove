@@ -1,6 +1,7 @@
 package com.raveline.petinlove.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
@@ -44,7 +45,7 @@ class PostItemAdapter(
         holder.bindPost(post)
         holder.changeLikeStatus(post)
         holder.changeDisplay(post)
-
+        holder.setVisibilityForUserFragments()
     }
 
     override fun getItemCount(): Int = postList.size
@@ -100,6 +101,23 @@ class PostItemAdapter(
                 setSavedPost(post)
             }
 
+        }
+
+        fun setVisibilityForUserFragments() {
+            when (fragment) {
+                is ProfileUserFragment -> {
+                    visibilityToolbarGone()
+                }
+                is ProfileFragment -> {
+                    visibilityToolbarGone()
+                }
+            }
+        }
+
+        private fun visibilityToolbarGone() {
+            binding.apply {
+                toolbarAdapterHomeFragment.visibility = GONE
+            }
         }
 
         private fun setSavedPost(post: PostModel) {
