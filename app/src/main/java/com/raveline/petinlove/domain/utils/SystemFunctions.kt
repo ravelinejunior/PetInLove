@@ -2,7 +2,6 @@ package com.raveline.petinlove.domain.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -18,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.Timestamp
 import com.google.gson.Gson
 import com.raveline.petinlove.data.model.UserModel
 import java.text.DecimalFormat
@@ -104,7 +102,9 @@ object SystemFunctions {
         return false
     }
 
-    fun getLoggedUserFromPref(sharedPreferences: SharedPreferences): UserModel? {
+    fun getLoggedUserFromPref(context: Context): UserModel? {
+        val sharedPreferences =
+            context.getSharedPreferences(GLOBAL_SHARED_PREFS_KEY, Context.MODE_PRIVATE)
         if (sharedPreferences.contains(USER_SAVED_SHARED_PREF_KEY)) {
             val userJson = sharedPreferences.getString(USER_SAVED_SHARED_PREF_KEY, null)
             val gson = Gson()

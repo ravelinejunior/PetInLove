@@ -34,6 +34,7 @@
         <entry key="app/src/main/res/layout/item_comments_adapter.xml" value="0.3536458333333333" />
         <entry key="app/src/main/res/layout/item_home_adapter.xml" value="0.36770833333333336" />
         <entry key="app/src/main/res/layout/item_search_user_adapter.xml" value="0.3536458333333333" />
+        <entry key="app/src/main/res/menu/main_bottom_menu.xml" value="0.3546875" />
         <entry key="app/src/main/res/menu/menu_home_fragment.xml" value="0.2609375" />
       </map>
     </option>

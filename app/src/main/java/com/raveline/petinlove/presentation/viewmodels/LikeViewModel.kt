@@ -2,7 +2,6 @@ package com.raveline.petinlove.presentation.viewmodels
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentReference
@@ -37,21 +36,24 @@ class LikeViewModel @Inject constructor(
     private val _postsStateFlow = MutableStateFlow<List<PostModel>>(emptyList())
     val postsFlow: StateFlow<List<PostModel>> get() = _postsStateFlow
 
+    private val _isSavedFlow = MutableStateFlow(false)
+    private val savedFlow: StateFlow<Boolean> get() = _isSavedFlow
+
     private fun setLike(postModel: PostModel, like: Int) = viewModelScope.launch {
-        val user = SystemFunctions.getLoggedUserFromPref(sharedPref)!!
+        val user = SystemFunctions.getLoggedUserFromPref(application)!!
         likesRepository.setLikedPost(postModel, user)
         likesRepository.updateLikeNumbers(postModel.postId, user.uid, like)
     }
 
     private fun removeLike(postModel: PostModel, like: Int) = viewModelScope.launch {
-        val user = SystemFunctions.getLoggedUserFromPref(sharedPref)!!
+        val user = SystemFunctions.getLoggedUserFromPref(application)!!
         likesRepository.removeLikePost(postModel.postId, user.uid)
         likesRepository.updateLikeNumbers(postModel.postId, user.uid, like)
     }
 
 
     fun getNumberLikes(postModel: PostModel) = viewModelScope.launch {
-        val user = SystemFunctions.getLoggedUserFromPref(sharedPref)!!
+        val user = SystemFunctions.getLoggedUserFromPref(application)!!
         likesRepository.getPostLikes(postModel.postId, user.uid).addOnSuccessListener { docs ->
 
             if (docs.data?.get(likeFieldIsLiked) != null) {
@@ -70,7 +72,7 @@ class LikeViewModel @Inject constructor(
     }
 
     suspend fun checkIsLiked(postModel: PostModel): DocumentReference {
-        val user = SystemFunctions.getLoggedUserFromPref(sharedPref)!!
+        val user = SystemFunctions.getLoggedUserFromPref(application)!!
         return likesRepository.verifyIfHasLiked(postModel.postId, user.uid)
     }
 
@@ -100,16 +102,46 @@ class LikeViewModel @Inject constructor(
         }
     }
 
-    fun setSave(postId: String, userModel: UserModel, hashMap: HashMap<String, Any>) =
+    fun setOrRemoveSavePost(
+        post: PostModel,
+        userModel: UserModel,
+        hashMap: HashMap<String, Any>? = null
+    ) {
+        viewModelScope.launch {
+            if (SystemFunctions.isNetworkAvailable(application)) {
+                _uiStateFlow.value = UiState.Loading
+
+                savedPostsRepository.getPostsSavedToSet(userModel.uid).document(post.postId).get()
+                    .addOnSuccessListener { doc ->
+                        if (doc?.exists() == true) {
+                            removeSavedPost(post, userModel.uid)
+                        } else {
+                            setSave(post.postId, userModel, hashMap!!)
+                        }
+                    }
+
+            } else {
+                _uiStateFlow.value = UiState.NoConnection
+            }
+        }
+    }
+
+    private fun setSave(postId: String, userModel: UserModel, hashMap: HashMap<String, Any>) =
         viewModelScope.launch {
             savedPostsRepository.setPostSave(postId, userModel.uid).set(hashMap)
-                .addOnCompleteListener { mTask ->
-                    if (mTask.isSuccessful) {
-                        Log.i("Saved", "setSave: ${mTask.result}")
-                    } else {
-                        Log.e("SavedError", "setSave: ${mTask.exception}")
-                    }
-                }
         }
+
+    private fun removeSavedPost(post: PostModel, userId: String) = viewModelScope.launch {
+        savedPostsRepository.deletePostSaved(post.postId, userId).addOnCompleteListener {
+            _isLikedFlow.value = false
+        }.addOnFailureListener {
+            it.printStackTrace()
+        }
+    }
+
+    suspend fun checkIsSaved(postModel: PostModel, userId: String): DocumentReference {
+        return savedPostsRepository.getPostsSavedToSet(userId).document(postModel.postId)
+    }
+
 
 }

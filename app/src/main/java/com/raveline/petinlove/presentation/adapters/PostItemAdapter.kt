@@ -114,7 +114,8 @@ class PostItemAdapter(
                 postFieldImagePath to post.imagePath,
                 postFieldDatePosted to Timestamp(Date(System.currentTimeMillis()))
             )
-            likeViewModel.setSave(post.postId, user, postMap)
+            likeViewModel.setOrRemoveSavePost(post, user, postMap)
+
 
         }
 
@@ -214,6 +215,24 @@ class PostItemAdapter(
                         }
                     } else {
                         error?.printStackTrace()
+                    }
+                }
+            }
+
+            likeViewModel.viewModelScope.launch {
+                likeViewModel.checkIsSaved(post, user.uid).addSnapshotListener { doc, error ->
+                    if (doc != null) {
+                        binding.apply {
+                            if (doc.exists()) {
+                                imageViewAdapterHomeSavePost.setBackgroundResource(R.drawable.ic_baseline_turned_in_24)
+                            } else {
+                                imageViewAdapterHomeSavePost.setBackgroundResource(R.drawable.ic_baseline_turned_in_not_24)
+                            }
+                        }
+                    }
+
+                    if (error != null) {
+                        binding.imageViewAdapterHomeSavePost.setBackgroundResource(R.drawable.ic_baseline_turned_in_not_24)
                     }
                 }
             }

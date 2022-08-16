@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment,
                 R.id.postFragment,
                 R.id.searchPersonFragment,
-                R.id.analyticsFragment
+                R.id.savedPostsFragment
             )
         )
 

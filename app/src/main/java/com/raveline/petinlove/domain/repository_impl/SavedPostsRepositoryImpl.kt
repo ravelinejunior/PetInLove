@@ -1,7 +1,9 @@
 package com.raveline.petinlove.domain.repository_impl
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raveline.petinlove.data.repository.SavedPostsRepository
 import com.raveline.petinlove.domain.utils.savedPostDocumentField
@@ -16,7 +18,19 @@ class SavedPostsRepositoryImpl @Inject constructor(private val fireStore: Fireba
         ).document(idPost)
     }
 
+    override suspend fun deletePostSaved(idPost: String, idUser: String): Task<Void> {
+
+        return fireStore.collection(savedPostFirebaseDatabaseReference).document(idUser).collection(
+            savedPostDocumentField
+        ).document(idPost).delete()
+    }
+
     override suspend fun getSavedPosts(userId: String): CollectionReference {
+        return fireStore.collection(savedPostFirebaseDatabaseReference).document(userId)
+            .collection(savedPostDocumentField)
+    }
+
+    override suspend fun getPostsSavedToSet(userId: String): CollectionReference {
         return fireStore.collection(savedPostFirebaseDatabaseReference).document(userId)
             .collection(savedPostDocumentField)
     }
