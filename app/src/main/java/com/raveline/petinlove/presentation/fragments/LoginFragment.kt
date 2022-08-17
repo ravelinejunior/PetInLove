@@ -89,7 +89,7 @@ class LoginFragment : Fragment() {
                     }
                     UiState.Success -> {
                         CustomDialogLoading().dismissLoading()
-                        findNavController().navigate(R.id.action_loginFragment_to_mainActivity)
+                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     }
 
                 }

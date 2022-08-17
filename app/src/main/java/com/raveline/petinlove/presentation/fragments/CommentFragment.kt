@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ import com.raveline.petinlove.presentation.adapters.CommentAdapter
 import com.raveline.petinlove.presentation.viewmodels.CommentViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.CommentViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -182,6 +184,7 @@ class CommentFragment : Fragment() {
             setHasFixedSize(true)
             setHasTransientState(true)
             layoutManager = LinearLayoutManager(context)
+            itemAnimator = SlideInUpAnimator(OvershootInterpolator(2f))
             adapter = commentAdapter
         }
     }

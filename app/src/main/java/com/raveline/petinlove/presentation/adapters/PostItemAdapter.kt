@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.model.PostModel
@@ -124,10 +125,10 @@ class PostItemAdapter(
 
             val postMap: HashMap<String, Any> = hashMapOf(
                 postFieldPostId to post.postId,
-                postFieldUserAuthorName to user.userName,
-                postFieldUserAuthorImage to user.userProfileImage,
+                postFieldUserAuthorName to post.userAuthorName,
+                postFieldUserAuthorImage to post.userAuthorImage,
                 postFieldLikes to post.likes,
-                postFieldAuthorId to user.uid,
+                postFieldAuthorId to post.authorId,
                 postFieldDescription to post.description,
                 postFieldImagePath to post.imagePath,
                 postFieldDatePosted to Timestamp(Date(System.currentTimeMillis()))
@@ -200,14 +201,53 @@ class PostItemAdapter(
 
         private fun goToProfileAuthor(profileId: String) {
             val navController = Navigation.findNavController(binding.root)
-            val directions =
-                HomeFragmentDirections.actionHomeFragmentToProfileUserFragment(profileId)
-            navController.navigate(directions)
+
+            when (fragment) {
+                is SavedPostsFragment -> {
+                    val directions =
+                        SavedPostsFragmentDirections.actionSavedPostsFragmentToProfileUserFragment(
+                            profileId
+                        )
+                    navController.navigate(directions)
+                }
+
+                is HomeFragment -> {
+                    val directions =
+                        HomeFragmentDirections.actionHomeFragmentToProfileUserFragment(profileId)
+                    navController.navigate(directions)
+                }
+
+                is SearchPersonFragment -> {
+                    val directions =
+                        SearchPersonFragmentDirections.actionSearchPersonFragmentToProfileUserFragment(
+                            profileId
+                        )
+                    navController.navigate(directions)
+                }
+
+                is CommentFragment -> {
+                    val directions =
+                        CommentFragmentDirections.actionCommentFragmentToProfileUserFragment(
+                            profileId
+                        )
+                    navController.navigate(directions)
+                }
+
+            }
+
         }
 
         private fun goToMyProfile() {
-            val navController = Navigation.findNavController(binding.root)
-            navController.navigate(R.id.action_homeFragment_to_profileFragment)
+            val navBar =
+                fragment?.requireActivity()?.findViewById<BottomNavigationView>(R.id.bnv_main_id)
+            val menu = navBar?.menu
+            fragment?.parentFragmentManager?.beginTransaction()
+                ?.remove(fragment)
+                ?.replace(fragment.id, ProfileFragment())?.commit()
+
+            val item = menu?.getItem(ProfileFragment().id)
+            item?.isChecked = true
+
         }
 
         fun changeLikeStatus(post: PostModel) {

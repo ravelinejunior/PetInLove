@@ -3,7 +3,6 @@ package com.raveline.petinlove.presentation.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -176,10 +175,8 @@ class AddPostFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
             .setType("image/*")
             .addCategory(Intent.CATEGORY_OPENABLE)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            val mimeTypes = arrayOf("image/jpeg", "image/png", "image/*")
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        }
+        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/*")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         startActivityForResult(
             Intent.createChooser(
                 intent,

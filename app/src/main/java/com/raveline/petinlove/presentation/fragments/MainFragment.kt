@@ -39,7 +39,7 @@ class MainFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
         if (firebaseAuth.currentUser != null) {
-            findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
+            findNavController().navigate(R.id.action_mainFragment_to_homeFragment)
         }
 
     }
@@ -67,11 +67,11 @@ class MainFragment : Fragment() {
             }
 
             if (firebaseAuth.currentUser != null) {
-                findNavController().navigate(R.id.action_mainFragment_to_mainActivity)
+                findNavController().navigate(R.id.action_mainFragment_to_homeFragment)
             }
         }
 
-        if(navBar != null){
+        if (navBar != null) {
             navBar?.visibility = View.GONE
         }
     }

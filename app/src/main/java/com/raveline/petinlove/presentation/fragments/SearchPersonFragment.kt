@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -22,6 +22,7 @@ import com.raveline.petinlove.presentation.adapters.UserItemAdapter
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
@@ -107,9 +108,9 @@ class SearchPersonFragment : Fragment() {
 
     private fun setSearchBar() {
         binding.searchViewSearchPersonFragment.addTextChangedListener { text ->
-            if(text != null && text.length > 3){
+            if (text != null && text.length > 3) {
                 userViewModel.getSearchedUsers(text.toString())
-            }else{
+            } else {
                 userViewModel.getSearchedUsers()
             }
         }
@@ -119,6 +120,7 @@ class SearchPersonFragment : Fragment() {
         binding.recyclerViewSearchPersonFragment.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
+            itemAnimator = SlideInRightAnimator(OvershootInterpolator(2f))
             adapter = userAdapter
         }
     }

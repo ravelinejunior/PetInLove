@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.databinding.ActivityHomeBinding
@@ -34,14 +32,9 @@ class HomeActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         if (firebaseAuth.currentUser != null) {
-            navController.navigate(R.id.action_mainFragment_to_mainActivity)
+            navController.navigate(R.id.action_mainFragment_to_homeFragment)
         }
 
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {

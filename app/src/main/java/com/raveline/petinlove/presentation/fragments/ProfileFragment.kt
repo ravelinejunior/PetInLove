@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,6 +28,7 @@ import com.raveline.petinlove.presentation.viewmodels.factory.LikesViewModelFact
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -68,6 +70,7 @@ class ProfileFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    requireActivity().onBackPressed()
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -154,6 +157,7 @@ class ProfileFragment : Fragment() {
         binding.recyclerViewProfileFragmentPublications.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
+            itemAnimator = SlideInUpAnimator(OvershootInterpolator(2f))
             adapter = homeAdapter
         }
     }

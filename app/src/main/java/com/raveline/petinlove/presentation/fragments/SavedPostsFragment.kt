@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +23,7 @@ import com.raveline.petinlove.presentation.viewmodels.factory.LikesViewModelFact
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -122,6 +124,7 @@ class SavedPostsFragment : Fragment() {
         binding.recyclerViewSavedPostFragment.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
+            itemAnimator = SlideInDownAnimator(OvershootInterpolator(2f))
             adapter = postAdapter
         }
     }
