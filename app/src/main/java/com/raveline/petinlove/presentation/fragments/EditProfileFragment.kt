@@ -98,7 +98,9 @@ class EditProfileFragment : Fragment() {
 
             toolbarEditProfileFragment.setNavigationOnClickListener {
                 navBar.visibility = VISIBLE
-                findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+                //  findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+                findNavController().popBackStack()
+                findNavController().popBackStack()
             }
         }
     }

@@ -166,6 +166,9 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_searchPersonFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
@@ -288,10 +291,19 @@
             app:argType="com.raveline.petinlove.data.model.PostModel" />
         <action
             android:id="@+id/action_commentFragment_to_profileUserFragment"
-            app:destination="@id/profileUserFragment" />
+            app:destination="@id/profileUserFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_commentFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -399,6 +411,17 @@
             app:popExitAnim="@android:animator/fade_out" />
         <action
             android:id="@+id/action_savedPostsFragment_to_commentFragment"
-            app:destination="@id/commentFragment" />
+            app:destination="@id/commentFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_savedPostsFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
 </navigation>

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
@@ -52,13 +53,17 @@ class HomeFragment : Fragment() {
         PostItemAdapter(likeViewModel, userViewModel, fragment = this)
     }
 
+    private lateinit var navBar: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        navBar.visibility = View.VISIBLE
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-
+                    lifecycleScope.launch {
+                        postViewModel.getPostsFromServer()
+                    }
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)

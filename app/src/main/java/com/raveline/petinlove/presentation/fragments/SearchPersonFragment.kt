@@ -40,7 +40,7 @@ class SearchPersonFragment : Fragment() {
     lateinit var firebaseAuth: FirebaseAuth
 
     private val userAdapter: UserItemAdapter by lazy {
-        UserItemAdapter()
+        UserItemAdapter(this,firebaseAuth)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
