@@ -53,11 +53,11 @@ class HomeFragment : Fragment() {
         PostItemAdapter(likeViewModel, userViewModel, fragment = this)
     }
 
-    private lateinit var navBar: BottomNavigationView
+    private var navBar: BottomNavigationView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navBar.visibility = View.VISIBLE
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -85,6 +85,9 @@ class HomeFragment : Fragment() {
         setupToolbar()
         setupRecyclerView()
         initObservers()
+
+        navBar = activity?.findViewById(R.id.bnv_main_id)!!
+        navBar?.visibility = View.VISIBLE
     }
 
     private fun setupToolbar() {

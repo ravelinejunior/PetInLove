@@ -48,7 +48,6 @@ class EditProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         navBar = requireActivity().findViewById(R.id.bnv_main_id)
 
         val callback: OnBackPressedCallback =
