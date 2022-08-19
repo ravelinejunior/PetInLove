@@ -1,8 +1,16 @@
 package com.raveline.petinlove.presentation.adapters
 
+import android.Manifest
+import android.app.DownloadManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
@@ -12,6 +20,12 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.model.PostModel
 import com.raveline.petinlove.data.model.UserModel
@@ -23,7 +37,9 @@ import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
+
 
 class PostItemAdapter(
     private val likeViewModel: LikeViewModel,
@@ -102,6 +118,16 @@ class PostItemAdapter(
                 setSavedPost(post)
             }
 
+            binding.imageViewAdapterHomeShareDownloadPost.setOnClickListener {
+                shareImage(post.imagePath)
+            }
+
+            binding.imageViewAdapterHomeMainImagePost.setOnLongClickListener {
+
+                checkGalleryImageAndDownloadImage(post)
+                true
+            }
+
         }
 
         fun setVisibilityForUserFragments() {
@@ -120,6 +146,64 @@ class PostItemAdapter(
                 toolbarAdapterHomeFragment.visibility = GONE
             }
         }
+
+        private fun checkGalleryImageAndDownloadImage(post: PostModel) {
+            Dexter.withContext(fragment?.context)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(object : PermissionListener {
+                    override fun onPermissionGranted(response: PermissionGrantedResponse) {
+                        downloadImageNew(System.currentTimeMillis().toString(), post.imagePath)
+                    }
+
+                    override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permission: PermissionRequest?,
+                        token: PermissionToken?
+                    ) {
+                    }
+                }).check()
+        }
+
+        private fun downloadImageNew(filename: String, downloadUrlOfImage: String) {
+            try {
+                val dm = fragment?.requireActivity()
+                    ?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager?
+                val downloadUri: Uri = Uri.parse(downloadUrlOfImage)
+                val request = DownloadManager.Request(downloadUri)
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                    .setAllowedOverRoaming(true)
+                    .setTitle(filename)
+                    .setMimeType("image/*") // Your file type. You can use this code to download other file types also.
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setDestinationInExternalPublicDir(
+                        Environment.DIRECTORY_PICTURES,
+                        File.separator.toString() + filename + ".jpg"
+                    )
+                dm!!.enqueue(request)
+                Toast.makeText(fragment?.context, "Image download started.", Toast.LENGTH_SHORT)
+                    .show()
+            } catch (e: Exception) {
+                Toast.makeText(fragment?.context, "Image download failed.", Toast.LENGTH_SHORT)
+                    .show()
+
+                Log.e("TAGImage", e.message.toString())
+            }
+        }
+
+        private fun shareImage(imagePath: String) {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                val message = "I'm sharing this awesome pic with you. So cute. \n\n\t"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, message + imagePath)
+                fragment?.startActivity(Intent.createChooser(shareIntent, "Share Image"))
+            } catch (e: Exception) {
+                e.toString();
+            }
+        }
+
 
         private fun setSavedPost(post: PostModel) {
 
@@ -328,7 +412,7 @@ class PostItemAdapter(
 
     fun getPostsById(userId: String) {
         postViewModel?.viewModelScope?.launch {
-            postViewModel.getPostsById().addSnapshotListener { docs, error ->
+            postViewModel.getPostsById().addSnapshotListener { docs, _ ->
                 if (docs != null) {
                     val arrayPost: ArrayList<PostModel> = arrayListOf()
                     for (doc in docs.documents) {
