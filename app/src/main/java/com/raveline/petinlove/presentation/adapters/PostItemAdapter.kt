@@ -169,6 +169,15 @@ class PostItemAdapter(
                         )
                     navController.navigate(directions)
                 }
+
+                is SavedPostsFragment -> {
+                    val directions =
+                        SavedPostsFragmentDirections.actionSavedPostsFragmentToCommentFragment(
+                            user,
+                            post
+                        )
+                    navController.navigate(directions)
+                }
             }
         }
 
@@ -189,6 +198,24 @@ class PostItemAdapter(
                 is HomeFragment -> {
                     val directions =
                         HomeFragmentDirections.actionHomeFragmentToPostDetailFragment(
+                            post,
+                            user.uid
+                        )
+                    navController.navigate(directions)
+                }
+
+                is ProfileUserFragment -> {
+                    val directions =
+                        ProfileUserFragmentDirections.actionProfileUserFragmentToPostDetailFragment(
+                            post,
+                            user.uid
+                        )
+                    navController.navigate(directions)
+                }
+
+                is SavedPostsFragment -> {
+                    val directions =
+                        SavedPostsFragmentDirections.actionSavedPostsFragmentToPostDetailFragment(
                             post,
                             user.uid
                         )

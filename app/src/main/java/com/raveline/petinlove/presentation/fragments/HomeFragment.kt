@@ -63,6 +63,7 @@ class HomeFragment : Fragment() {
                 override fun handleOnBackPressed() {
                     lifecycleScope.launch {
                         postViewModel.getPostsFromServer()
+                        findNavController().navigate(R.id.action_homeFragment_self)
                     }
                 }
             }

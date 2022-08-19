@@ -58,7 +58,7 @@ class PostDetailFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.action_postDetailFragment_to_homeFragment)
+                    findNavController().popBackStack()
                     navBar.visibility = View.VISIBLE
                 }
             }
