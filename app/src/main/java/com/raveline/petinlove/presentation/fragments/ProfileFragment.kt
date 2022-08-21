@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
     private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
 
     private val homeAdapter: PostItemAdapter by lazy {
-        PostItemAdapter(likeViewModel, userViewModel, postViewModel,this)
+        PostItemAdapter(likeViewModel, userViewModel, postViewModel, this)
     }
 
 
@@ -70,7 +70,7 @@ class ProfileFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    requireActivity().onBackPressed()
+
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -98,7 +98,11 @@ class ProfileFragment : Fragment() {
             }
 
             textViewProfileFragmentEdit.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+                try {
+                    findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+                } catch (e: Exception) {
+                    findNavController().navigate(R.id.action_searchPersonFragment_to_editProfileFragment)
+                }
             }
         }
         displayUserInfo()
@@ -149,6 +153,7 @@ class ProfileFragment : Fragment() {
                     homeAdapter.getPostsById(user.uid)
                     setupRecyclerView()
                 }
+                CustomDialogLoading().dismissLoading()
             }
         }
     }

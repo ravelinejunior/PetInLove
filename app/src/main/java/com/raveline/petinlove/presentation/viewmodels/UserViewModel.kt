@@ -74,23 +74,23 @@ class UserViewModel @Inject constructor(
         }
     }
 
-     fun getUserById(userId: String) = viewModelScope.launch {
-         if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
-             _uiUserProfileStateFlow.value = UiState.Loading
-             userRepository.getUserDataFromServer(userId).addOnSuccessListener { doc ->
-                 if (doc != null) {
-                     val user = mapToUser(doc)
-                     _userProfileFlow.value = user
-                     _uiUserProfileStateFlow.value = UiState.Success
-                 }else{
-                     _uiUserProfileStateFlow.value = UiState.Error
-                 }
-             }
-         } else {
-             _uiUserProfileStateFlow.value = UiState.NoConnection
-         }
+    fun getUserById(userId: String) = viewModelScope.launch {
+        if (SystemFunctions.isNetworkAvailable(application.baseContext)) {
+            _uiUserProfileStateFlow.value = UiState.Loading
+            userRepository.getUserDataFromServer(userId).addOnSuccessListener { doc ->
+                if (doc != null) {
+                    val user = mapToUser(doc)
+                    _userProfileFlow.value = user
+                    _uiUserProfileStateFlow.value = UiState.Success
+                } else {
+                    _uiUserProfileStateFlow.value = UiState.Error
+                }
+            }
+        } else {
+            _uiUserProfileStateFlow.value = UiState.NoConnection
+        }
 
-     }
+    }
 
 
     fun getSearchedUsers(name: String = "") = viewModelScope.launch {
@@ -111,16 +111,14 @@ class UserViewModel @Inject constructor(
 
                             }
 
-                            _userListFlow.value = users.sortedBy {
-                                it.userName
-                            }
+                            _userListFlow.value = users
                         } else {
                             result = error.toString()
                             _uiStateFlow.value = UiState.Error
                         }
                     }
             } else {
-                userRepository.getSearchUsers().addSnapshotListener { value, error ->
+                userRepository.getSearchUsers().get().addOnSuccessListener { value ->
                     if (value != null) {
                         _userListFlow.value = emptyList()
                         for (doc in value.documents) {
@@ -129,7 +127,6 @@ class UserViewModel @Inject constructor(
 
                         _userListFlow.value = users
                     } else {
-                        result = error.toString()
                         _uiStateFlow.value = UiState.Error
                     }
                 }

@@ -55,7 +55,7 @@ class CommentFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.action_commentFragment_to_homeFragment)
+                    findNavController().popBackStack()
                     navBar.visibility = View.VISIBLE
                 }
             }
@@ -84,7 +84,7 @@ class CommentFragment : Fragment() {
         binding.apply {
             toolbarCommentFragment.title = getString(R.string.comments_string_title)
             toolbarCommentFragment.setNavigationOnClickListener {
-                findNavController().navigate(R.id.action_commentFragment_to_homeFragment)
+                findNavController().popBackStack()
                 navBar.visibility = View.VISIBLE
             }
         }

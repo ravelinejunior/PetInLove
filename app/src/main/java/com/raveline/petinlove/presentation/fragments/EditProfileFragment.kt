@@ -48,7 +48,6 @@ class EditProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         navBar = requireActivity().findViewById(R.id.bnv_main_id)
 
         val callback: OnBackPressedCallback =
@@ -98,7 +97,9 @@ class EditProfileFragment : Fragment() {
 
             toolbarEditProfileFragment.setNavigationOnClickListener {
                 navBar.visibility = VISIBLE
-                findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+                //  findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+                findNavController().popBackStack()
+                findNavController().popBackStack()
             }
         }
     }
