@@ -22,14 +22,10 @@ class MainFragment : Fragment() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
-    private var navBar: BottomNavigationView? = null
+    lateinit var navBar: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            navBar = requireActivity().findViewById(R.id.bnv_main_id)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -50,6 +46,7 @@ class MainFragment : Fragment() {
     ): View {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
+        navBar = requireActivity().findViewById(R.id.bnv_main_id)
 
         return binding.root
 
@@ -71,9 +68,7 @@ class MainFragment : Fragment() {
             }
         }
 
-        if (navBar != null) {
-            navBar?.visibility = View.GONE
-        }
+        navBar.visibility = View.GONE
     }
 
     override fun onDestroyView() {
