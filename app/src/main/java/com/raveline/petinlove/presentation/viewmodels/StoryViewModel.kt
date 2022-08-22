@@ -5,9 +5,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.Query
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.StoryModel
 import com.raveline.petinlove.data.model.UserModel
+import com.raveline.petinlove.data.model.mapToStory
 import com.raveline.petinlove.domain.repository_impl.StoryRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +32,22 @@ class StoryViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
+
+     fun getActiveStories() = viewModelScope.launch {
+        storyRepository.getStories().orderBy(timeStartFieldStory, Query.Direction.DESCENDING)
+            .addSnapshotListener { docs, error ->
+                if (docs != null) {
+                    val stories = arrayListOf<StoryModel>()
+                    for (doc in docs.documents) {
+                        val story = mapToStory(doc)
+                        stories.add(story)
+                    }
+                    Log.i("TAGStories", docs.documents.toString())
+                }
+
+                error?.printStackTrace()
+            }
+    }
 
     fun setStoryOnServer(
         user: UserModel,
@@ -81,6 +99,5 @@ class StoryViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
-
 
 }

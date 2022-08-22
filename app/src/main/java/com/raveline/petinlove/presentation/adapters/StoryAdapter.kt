@@ -43,6 +43,7 @@ class StoryAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val story = stories[position]
         holder.bind(story, fragment)
+        storyViewModel.getActiveStories()
     }
 
     override fun getItemCount(): Int = stories.size
@@ -54,6 +55,7 @@ class StoryAdapter(
     ) {
 
         fun bind(story: StoryModel, fragment: Fragment) {
+
             when (viewBinding) {
                 is ItemAddStoryAdapterBinding -> {
                     viewBinding.apply {

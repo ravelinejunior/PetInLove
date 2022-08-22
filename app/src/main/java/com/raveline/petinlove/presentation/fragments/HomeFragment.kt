@@ -1,6 +1,7 @@
 package com.raveline.petinlove.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +65,7 @@ class HomeFragment : Fragment() {
     }
 
     private val storiesAdapter: StoryAdapter by lazy {
-        StoryAdapter(storyViewModel,this)
+        StoryAdapter(storyViewModel, this)
     }
 
     private var navBar: BottomNavigationView? = null
@@ -167,21 +168,17 @@ class HomeFragment : Fragment() {
             storyViewModel.storyFlow.collectLatest { stories ->
                 if (stories.isEmpty()) {
                     val story = listOf(
-                        StoryModel(
-                            false,
-                            System.currentTimeMillis(),
-                            System.currentTimeMillis(),
-                            firstRegisterUserImage,
-                            userViewModel.userModel.value?.userName.toString(),
-                            userViewModel.userModel.value?.uid.toString(),
-                            "",
-                            0
-                        )
+                        setUnitStory()
                     )
                     storiesAdapter.setData(story)
+                    Log.i("TAGStories", stories.toString())
                 } else {
-                    storiesAdapter.setData(stories)
+                    val mStories = arrayListOf<StoryModel>()
+                    mStories.addAll(stories)
+                    mStories.add(0, setUnitStory())
+                    storiesAdapter.setData(mStories)
                     setupStoriesRecyclerView()
+                    Log.i("MTAGStories", mStories.toString())
                 }
             }
         }
@@ -208,5 +205,16 @@ class HomeFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
+    private fun setUnitStory(): StoryModel = StoryModel(
+        false,
+        System.currentTimeMillis(),
+        System.currentTimeMillis(),
+        firstRegisterUserImage,
+        userViewModel.userModel.value?.userName.toString(),
+        userViewModel.userModel.value?.uid.toString(),
+        "",
+        0
+    )
 
 }

@@ -18,7 +18,7 @@ class LikesRepositoryImpl @Inject constructor(private val fireStore: FirebaseFir
         postModel: PostModel,
         userModel: UserModel
     ) {
-        var result = 0
+        val result = 0
         val likeDoc = fireStore.collection(postLikesFirebaseDatabaseReference)
             .document(postModel.postId)
 

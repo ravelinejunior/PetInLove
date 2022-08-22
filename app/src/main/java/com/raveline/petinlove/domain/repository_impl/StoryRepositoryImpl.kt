@@ -2,6 +2,8 @@ package com.raveline.petinlove.domain.repository_impl
 
 import android.net.Uri
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
@@ -27,5 +29,18 @@ class StoryRepositoryImpl @Inject constructor(
     override suspend fun setStoryOnServer(storyId: String, storyMap: Map<String, Any>): Task<Void> {
         return firestore.collection(storyFirebaseDatabaseReference)
             .document(storyId).set(storyMap)
+    }
+
+    override suspend fun getStories(): CollectionReference {
+        return firestore.collection(storyFirebaseDatabaseReference)
+    }
+
+    override suspend fun updateStories(storyId: String) {
+        val removeStoryMap = mapOf(
+            storyId to FieldValue.delete()
+        )
+
+        firestore.collection(storyFirebaseDatabaseReference).document(storyId)
+            .update(removeStoryMap)
     }
 }
