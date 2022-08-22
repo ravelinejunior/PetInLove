@@ -59,6 +59,7 @@ class StoryAdapter(
                     viewBinding.apply {
                         Glide.with(imageViewAddStoryAdapter)
                             .load(story.imagePath)
+                            .fitCenter()
                             .into(imageViewAddStoryAdapter)
                     }
 
@@ -84,10 +85,12 @@ class StoryAdapter(
                 if (story.isSeen) {
                     Glide.with(imageViewStoryAdapterSeen)
                         .load(story.imagePath)
+                        .fitCenter()
                         .into(imageViewStoryAdapterSeen)
                 } else {
                     Glide.with(imageViewStoryAdapterSeen)
                         .load(story.imagePath)
+                        .fitCenter()
                         .into(imageViewStoryAdapterSeen)
                 }
                 textViewStoryAdapterUserName.text = story.userName
