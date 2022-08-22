@@ -27,6 +27,7 @@
         <entry key="app/src/main/res/layout/fragment_comment.xml" value="0.3546875" />
         <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.3692708333333333" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.35733695652173914" />
+        <entry key="app/src/main/res/layout/fragment_image_add_general.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.3692708333333333" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.3546875" />
         <entry key="app/src/main/res/layout/fragment_post_detail.xml" value="0.3546875" />

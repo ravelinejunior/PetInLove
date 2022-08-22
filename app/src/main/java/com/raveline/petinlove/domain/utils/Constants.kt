@@ -63,6 +63,7 @@ const val viewsFieldStory = "views"
 
 const val mediaStoreKeyProfileImage = 165164
 const val postStoreKeyProfileImage = 4455
+const val storyStoreKeyImage = 6652
 
 const val GLOBAL_SHARED_PREFS_KEY = "GlobalSharedKey"
 const val USER_SAVED_SHARED_PREF_KEY = "SavedUserSharedKey"

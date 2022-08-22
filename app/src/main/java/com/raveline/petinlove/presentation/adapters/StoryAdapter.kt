@@ -2,18 +2,22 @@ package com.raveline.petinlove.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
+import com.raveline.petinlove.R
 import com.raveline.petinlove.data.model.StoryModel
 import com.raveline.petinlove.databinding.ItemAddStoryAdapterBinding
 import com.raveline.petinlove.databinding.ItemStoriesAdapterBinding
 import com.raveline.petinlove.domain.utils.ListDiffUtil
-import com.raveline.petinlove.presentation.viewmodels.UserViewModel
+import com.raveline.petinlove.presentation.viewmodels.StoryViewModel
 
 class StoryAdapter(
-    private val userViewModel: UserViewModel
+    private val storyViewModel: StoryViewModel,
+    private val fragment: Fragment
 ) : RecyclerView.Adapter<StoryAdapter.MyViewHolder>() {
 
     private var stories = emptyList<StoryModel>()
@@ -38,7 +42,7 @@ class StoryAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val story = stories[position]
-        holder.bind(story)
+        holder.bind(story, fragment)
     }
 
     override fun getItemCount(): Int = stories.size
@@ -49,21 +53,26 @@ class StoryAdapter(
         viewBinding.root
     ) {
 
-        fun bind(story: StoryModel) {
+        fun bind(story: StoryModel, fragment: Fragment) {
             when (viewBinding) {
-
                 is ItemAddStoryAdapterBinding -> {
                     viewBinding.apply {
                         Glide.with(imageViewAddStoryAdapter)
                             .load(story.imagePath)
                             .into(imageViewAddStoryAdapter)
                     }
+
+                    viewBinding.root.setOnClickListener {
+                        navigateToImagePick(fragment)
+                    }
                 }
 
                 is ItemStoriesAdapterBinding -> {
                     setImageIfIsSeen(viewBinding, story)
+                    viewBinding.root.setOnClickListener {
+                        alertImageSelect(fragment)
+                    }
                 }
-
             }
         }
 
@@ -84,6 +93,18 @@ class StoryAdapter(
                 textViewStoryAdapterUserName.text = story.userName
             }
         }
+
+        private fun navigateToImagePick(fragment: Fragment) {
+            fragment.findNavController()
+                .navigate(R.id.action_homeFragment_to_imageAddGeneralFragment)
+        }
+
+        private fun alertImageSelect(fragment: Fragment) {
+
+            fragment.findNavController()
+                .navigate(R.id.action_homeFragment_to_imageAddGeneralFragment)
+        }
+
     }
 
     fun setData(storiesList: List<StoryModel>) {
@@ -92,6 +113,5 @@ class StoryAdapter(
         stories = storiesList
         result.dispatchUpdatesTo(this)
     }
-
 
 }

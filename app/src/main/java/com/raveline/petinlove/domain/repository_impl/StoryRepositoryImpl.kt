@@ -26,6 +26,6 @@ class StoryRepositoryImpl @Inject constructor(
 
     override suspend fun setStoryOnServer(storyId: String, storyMap: Map<String, Any>): Task<Void> {
         return firestore.collection(storyFirebaseDatabaseReference)
-            .document(storyId).set(storyId)
+            .document(storyId).set(storyMap)
     }
 }

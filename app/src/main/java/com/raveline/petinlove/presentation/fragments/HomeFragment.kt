@@ -15,16 +15,22 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.raveline.petinlove.R
 import com.raveline.petinlove.data.listener.UiState
+import com.raveline.petinlove.data.model.StoryModel
 import com.raveline.petinlove.databinding.FragmentHomeBinding
 import com.raveline.petinlove.domain.utils.CustomDialogLoading
+import com.raveline.petinlove.domain.utils.firstRegisterUserImage
 import com.raveline.petinlove.presentation.adapters.PostItemAdapter
+import com.raveline.petinlove.presentation.adapters.StoryAdapter
 import com.raveline.petinlove.presentation.viewmodels.LikeViewModel
 import com.raveline.petinlove.presentation.viewmodels.PostViewModel
+import com.raveline.petinlove.presentation.viewmodels.StoryViewModel
 import com.raveline.petinlove.presentation.viewmodels.UserViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.LikesViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.PostViewModelFactory
+import com.raveline.petinlove.presentation.viewmodels.factory.StoryViewModelFactory
 import com.raveline.petinlove.presentation.viewmodels.factory.UserViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,8 +55,16 @@ class HomeFragment : Fragment() {
     lateinit var likesViewModelFactory: LikesViewModelFactory
     private val likeViewModel: LikeViewModel by viewModels { likesViewModelFactory }
 
+    @Inject
+    lateinit var storyViewModelFactory: StoryViewModelFactory
+    private val storyViewModel: StoryViewModel by viewModels { storyViewModelFactory }
+
     private val homeAdapter: PostItemAdapter by lazy {
         PostItemAdapter(likeViewModel, userViewModel, fragment = this)
+    }
+
+    private val storiesAdapter: StoryAdapter by lazy {
+        StoryAdapter(storyViewModel,this)
     }
 
     private var navBar: BottomNavigationView? = null
@@ -85,6 +99,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupRecyclerView()
+        setupStoriesRecyclerView()
         initObservers()
 
         navBar = activity?.findViewById(R.id.bnv_main_id)!!
@@ -147,6 +162,29 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            storyViewModel.storyFlow.collectLatest { stories ->
+                if (stories.isEmpty()) {
+                    val story = listOf(
+                        StoryModel(
+                            false,
+                            System.currentTimeMillis(),
+                            System.currentTimeMillis(),
+                            firstRegisterUserImage,
+                            userViewModel.userModel.value?.userName.toString(),
+                            userViewModel.userModel.value?.uid.toString(),
+                            "",
+                            0
+                        )
+                    )
+                    storiesAdapter.setData(story)
+                } else {
+                    storiesAdapter.setData(stories)
+                    setupStoriesRecyclerView()
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -154,6 +192,14 @@ class HomeFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = homeAdapter
+        }
+    }
+
+    private fun setupStoriesRecyclerView() {
+        binding.recyclerVieHomeFragmentStories.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = storiesAdapter
         }
     }
 
