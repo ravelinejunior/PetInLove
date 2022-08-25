@@ -183,6 +183,8 @@ class HomeFragment : Fragment() {
             storyViewModel.idsFlow.collectLatest { ids ->
 
                 if (ids.isNotEmpty()) {
+                    binding.recyclerVieHomeFragmentStories.recycledViewPool.clear()
+                    setupStoriesRecyclerView()
                     storiesAdapter.setIdData(ids)
                 }
             }

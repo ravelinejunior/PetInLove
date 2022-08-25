@@ -5,6 +5,9 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.StoryModel
@@ -40,34 +43,23 @@ class StoryViewModel @Inject constructor(
     suspend fun getUserById(userId: String): DocumentReference = storyRepository.getUserById(userId)
 
     fun getActiveStories() = viewModelScope.launch {
-        storyRepository.getStories().addSnapshotListener { ids, error ->
-            if (ids != null) {
-                val idsList = arrayListOf<String>()
-                for (id in ids.documents) {
-                    idsList.add(id.id)
-                }
 
-                setIds(idsList)
-                Log.i("TAGGetActiveStories", idsList.toString())
-            }
-        }
-    }
-
-
-    /*
-    * storyViewModel.getActiveStories().addSnapshotListener { ids, error ->
-                if (ids != null) {
-                    val idsList = arrayListOf<String>()
-                    for (id in ids) {
-                        idsList.add(id.id)
+        storyRepository.getActiveStories().addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val list = arrayListOf<String>()
+                if (snapshot.hasChildren()) {
+                    for (doc in snapshot.children) {
+                        list.add(doc.key.toString())
                     }
-
-                    storyViewModel.setIds(idsList)
-                    setIdData(idsList)
+                    _idsStoryStateFlow.value = list
                 }
             }
-    * */
 
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
 
     fun setStoryOnServer(
         user: UserModel,
@@ -97,6 +89,8 @@ class StoryViewModel @Inject constructor(
                                         timeEndFieldStory to timeEnd,
                                         userImageFieldStory to user.userProfileImage
                                     )
+
+                                    storyRepository.saveStory(user.uid, storyId, storyMap)
 
                                     storyRepository.setStoryOnServer(user.uid, storyId, storyMap)
                                         .addOnCompleteListener { mTask ->

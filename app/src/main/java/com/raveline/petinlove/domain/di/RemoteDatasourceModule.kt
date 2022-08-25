@@ -1,6 +1,7 @@
 package com.raveline.petinlove.domain.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
@@ -23,5 +24,9 @@ class RemoteDatasourceModule {
 
     @Provides
     @Singleton
-    fun providesFirebaseStorage():FirebaseStorage = FirebaseStorage.getInstance()
+    fun providesFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
+    @Provides
+    @Singleton
+    fun providesFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance()
 }

@@ -1,5 +1,6 @@
 package com.raveline.petinlove.presentation.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -47,20 +48,16 @@ class StoryAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0) return 0
-
-        return 1
+        return if (position == 0) 0
+        else 1
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val story = stories[position]
         if (idList.isEmpty()) {
             holder.bindForAddStory(holder, fragment)
         } else {
-            if (holder.bindingAdapterPosition == 0) {
+            if (holder.absoluteAdapterPosition == 0) {
                 getUserDataDisplay(holder, position)
-            } else {
-                holder.bindForStories(holder, story, fragment)
             }
         }
 
@@ -82,7 +79,7 @@ class StoryAdapter(
                     storyViewModel.getUserById(id).addSnapshotListener { doc, error ->
                         if (doc != null) {
                             val user = hashMapToUserModel(doc)
-
+                            Log.i("TAGUser", user.toString())
                             if (pos != 0) {
                                 //add function to verify if the story was saw
                                 val binding =
