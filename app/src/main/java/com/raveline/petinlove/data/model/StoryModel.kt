@@ -12,7 +12,8 @@ data class StoryModel(
     val userName: String,
     val userId: String,
     val storyId: String,
-    val views: Int
+    val views: Int,
+    val profileImage: String,
 ) : Serializable
 
 fun mapToStory(result: DocumentSnapshot): StoryModel {
@@ -24,6 +25,7 @@ fun mapToStory(result: DocumentSnapshot): StoryModel {
         userName = result[userNameFieldStory].toString(),
         storyId = result[storyIdFieldStory].toString(),
         userId = result[userIdFieldStory].toString(),
-        views = result[viewsFieldStory].toString().toInt()
+        views = result[viewsFieldStory].toString().toInt(),
+        profileImage = result[userImageFieldStory].toString(),
     )
 }

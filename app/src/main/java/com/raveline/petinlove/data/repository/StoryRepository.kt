@@ -13,7 +13,13 @@ interface StoryRepository {
         userId: String
     ): UploadTask
 
-    suspend fun setStoryOnServer(storyId: String, storyMap: Map<String, Any>): Task<Void>
-    suspend fun getStories():CollectionReference
+    suspend fun setStoryOnServer(
+        userId: String,
+        storyId: String,
+        storyMap: HashMap<String, Any>
+    ): Task<Void>
+
+    suspend fun getStories(): CollectionReference
     suspend fun updateStories(storyId: String)
+    suspend fun getUserById(userId: String): DocumentReference
 }

@@ -52,6 +52,7 @@ const val commentFieldDataCreation = "dateCreated"
 
 //Stories Database Server
 const val storyFirebaseDatabaseReference = "Stories"
+const val storyFirebaseDocumentReference = "Story"
 const val isSeenFieldStory = "isSeen"
 const val timeStartFieldStory = "timeStart"
 const val timeEndFieldStory = "timeEnd"
@@ -60,6 +61,7 @@ const val userNameFieldStory = "userName"
 const val userIdFieldStory = "userId"
 const val storyIdFieldStory = "storyId"
 const val viewsFieldStory = "views"
+const val userImageFieldStory = "profileImage"
 
 const val mediaStoreKeyProfileImage = 165164
 const val postStoreKeyProfileImage = 4455

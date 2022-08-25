@@ -5,11 +5,10 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.DocumentReference
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.StoryModel
 import com.raveline.petinlove.data.model.UserModel
-import com.raveline.petinlove.data.model.mapToStory
 import com.raveline.petinlove.domain.repository_impl.StoryRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,21 +32,42 @@ class StoryViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
 
-     fun getActiveStories() = viewModelScope.launch {
-        storyRepository.getStories().orderBy(timeStartFieldStory, Query.Direction.DESCENDING)
-            .addSnapshotListener { docs, error ->
-                if (docs != null) {
-                    val stories = arrayListOf<StoryModel>()
-                    for (doc in docs.documents) {
-                        val story = mapToStory(doc)
-                        stories.add(story)
-                    }
-                    Log.i("TAGStories", docs.documents.toString())
+    private val _idsStoryStateFlow = MutableStateFlow<List<String>>(emptyList())
+    val idsFlow: StateFlow<List<String>> get() = _idsStoryStateFlow
+
+    val user = SystemFunctions.getLoggedUserFromPref(application)
+
+    suspend fun getUserById(userId: String): DocumentReference = storyRepository.getUserById(userId)
+
+    fun getActiveStories() = viewModelScope.launch {
+        storyRepository.getStories().addSnapshotListener { ids, error ->
+            if (ids != null) {
+                val idsList = arrayListOf<String>()
+                for (id in ids.documents) {
+                    idsList.add(id.id)
                 }
 
-                error?.printStackTrace()
+                setIds(idsList)
+                Log.i("TAGGetActiveStories", idsList.toString())
             }
+        }
     }
+
+
+    /*
+    * storyViewModel.getActiveStories().addSnapshotListener { ids, error ->
+                if (ids != null) {
+                    val idsList = arrayListOf<String>()
+                    for (id in ids) {
+                        idsList.add(id.id)
+                    }
+
+                    storyViewModel.setIds(idsList)
+                    setIdData(idsList)
+                }
+            }
+    * */
+
 
     fun setStoryOnServer(
         user: UserModel,
@@ -66,7 +86,7 @@ class StoryViewModel @Inject constructor(
                                     val timeEnd = System.currentTimeMillis() + 86400000
                                     val storyId =
                                         UUID.randomUUID().toString().replace("-", "").trim()
-                                    val storyMap = hashMapOf(
+                                    val storyMap = hashMapOf<String, Any>(
                                         storyIdFieldStory to storyId,
                                         imagePathFieldStory to bImageUri.toString(),
                                         userNameFieldStory to user.userName,
@@ -74,10 +94,11 @@ class StoryViewModel @Inject constructor(
                                         userIdFieldStory to user.uid,
                                         viewsFieldStory to 0,
                                         timeStartFieldStory to System.currentTimeMillis(),
-                                        timeEndFieldStory to timeEnd
+                                        timeEndFieldStory to timeEnd,
+                                        userImageFieldStory to user.userProfileImage
                                     )
 
-                                    storyRepository.setStoryOnServer(storyId, storyMap)
+                                    storyRepository.setStoryOnServer(user.uid, storyId, storyMap)
                                         .addOnCompleteListener { mTask ->
                                             if (mTask.isSuccessful) {
                                                 _uiStateFlow.value = UiState.Success
@@ -98,6 +119,10 @@ class StoryViewModel @Inject constructor(
             _uiStateFlow.value = UiState.Error
             e.printStackTrace()
         }
+    }
+
+    fun setIds(ids: List<String>) {
+        _idsStoryStateFlow.value = ids
     }
 
 }

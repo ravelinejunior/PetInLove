@@ -135,6 +135,7 @@ class HomeFragment : Fragment() {
                 when (uiState) {
                     UiState.Initial -> {
                         postViewModel.getPostsFromServer()
+                        storyViewModel.getActiveStories()
                     }
                     UiState.Loading -> {
                         CustomDialogLoading().startLoading(requireActivity())
@@ -173,12 +174,16 @@ class HomeFragment : Fragment() {
                     storiesAdapter.setData(story)
                     Log.i("TAGStories", stories.toString())
                 } else {
-                    val mStories = arrayListOf<StoryModel>()
-                    mStories.addAll(stories)
-                    mStories.add(0, setUnitStory())
-                    storiesAdapter.setData(mStories)
-                    setupStoriesRecyclerView()
-                    Log.i("MTAGStories", mStories.toString())
+                    storiesAdapter.setData(stories)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            storyViewModel.idsFlow.collectLatest { ids ->
+
+                if (ids.isNotEmpty()) {
+                    storiesAdapter.setIdData(ids)
                 }
             }
         }
@@ -214,7 +219,8 @@ class HomeFragment : Fragment() {
         userViewModel.userModel.value?.userName.toString(),
         userViewModel.userModel.value?.uid.toString(),
         "",
-        0
+        0,
+        firstRegisterUserImage
     )
 
 }
