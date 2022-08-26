@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewStoryAdapterNotSeen"
+        android:id="@+id/imageViewStoryAdapterSeen"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_45sdp"
         android:contentDescription="@string/welcome_message"
@@ -20,14 +20,14 @@
         tools:src="@tools:sample/avatars" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewStoryAdapterSeen"
+        android:id="@+id/imageViewStoryAdapterNotSeen"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_45sdp"
         android:contentDescription="@string/welcome_message"
         android:scaleType="centerCrop"
         android:visibility="gone"
         app:civ_border_color="@color/red"
-        app:civ_border_width="@dimen/_3sdp"
+        app:civ_border_width="@dimen/_2sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />

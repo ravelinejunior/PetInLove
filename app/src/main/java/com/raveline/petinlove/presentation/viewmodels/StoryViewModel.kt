@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.StoryModel
 import com.raveline.petinlove.data.model.UserModel
+import com.raveline.petinlove.data.model.mapToStory
 import com.raveline.petinlove.domain.repository_impl.StoryRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,8 +31,8 @@ class StoryViewModel @Inject constructor(
     private val application: Application
 ) : ViewModel() {
 
-    private val _storyStateFlow = MutableStateFlow<List<StoryModel>>(emptyList())
-    val storyFlow: StateFlow<List<StoryModel>> get() = _storyStateFlow
+    private val _storyStateFlow = MutableStateFlow<ArrayList<StoryModel>>(arrayListOf())
+    val storyFlow: StateFlow<ArrayList<StoryModel>> get() = _storyStateFlow
 
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
@@ -44,7 +46,7 @@ class StoryViewModel @Inject constructor(
 
     fun getActiveStories() = viewModelScope.launch {
 
-        storyRepository.getActiveStories().addValueEventListener(object : ValueEventListener {
+        storyRepository.getStoriesIds().addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = arrayListOf<String>()
                 if (snapshot.hasChildren()) {
@@ -52,6 +54,30 @@ class StoryViewModel @Inject constructor(
                         list.add(doc.key.toString())
                     }
                     _idsStoryStateFlow.value = list
+
+                    val currentTime = System.currentTimeMillis()
+                    _storyStateFlow.value.clear()
+                    val arrays = arrayListOf<StoryModel>()
+                    arrays.add(setUnitStory())
+                    for (id in _idsStoryStateFlow.value) {
+                        var count = 0
+                        var story: StoryModel? = null
+
+                        for (dataSnapshot in snapshot.child(id).children) {
+                            val storyMap = dataSnapshot.value as Map<String, Any>
+                            story = mapToStory(storyMap)
+                            if (currentTime > story.timeStart && currentTime < story.timeEnd) {
+                                count++
+                            }
+                        }
+
+                        if (count > 0) {
+                            arrays.add(story!!)
+                        }
+                    }
+
+                    _storyStateFlow.value = arrays
+
                 }
             }
 
@@ -60,6 +86,8 @@ class StoryViewModel @Inject constructor(
             }
         })
     }
+
+    suspend fun getStoriesGen():DatabaseReference = storyRepository.getActiveStories()
 
     fun setStoryOnServer(
         user: UserModel,
@@ -118,5 +146,17 @@ class StoryViewModel @Inject constructor(
     fun setIds(ids: List<String>) {
         _idsStoryStateFlow.value = ids
     }
+
+    private fun setUnitStory(): StoryModel = StoryModel(
+        false,
+        System.currentTimeMillis(),
+        System.currentTimeMillis(),
+        firstRegisterUserImage,
+        "",
+        SystemFunctions.getLoggedUserFromPref(application)?.uid.toString(),
+        "",
+        0,
+        firstRegisterUserImage
+    )
 
 }

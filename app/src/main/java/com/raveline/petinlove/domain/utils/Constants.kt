@@ -52,7 +52,7 @@ const val commentFieldDataCreation = "dateCreated"
 
 //Stories Database Server
 const val storyFirebaseDatabaseReference = "Stories"
-const val storyFirebaseDocumentReference = "Story"
+const val storyFirebaseDocumentReference = "StorySeen"
 const val isSeenFieldStory = "isSeen"
 const val timeStartFieldStory = "timeStart"
 const val timeEndFieldStory = "timeEnd"

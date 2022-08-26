@@ -54,6 +54,10 @@ class StoryRepositoryImpl @Inject constructor(
         return firebaseDatabase.getReference(storyFirebaseDatabaseReference)
     }
 
+    override suspend fun getStoriesIds(): DatabaseReference {
+        return firebaseDatabase.getReference(storyFirebaseDatabaseReference)
+    }
+
     override suspend fun updateStories(storyId: String) {
         val removeStoryMap = mapOf(
             storyId to FieldValue.delete()

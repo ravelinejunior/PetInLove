@@ -166,29 +166,11 @@ class HomeFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            storyViewModel.storyFlow.collectLatest { stories ->
-                if (stories.isEmpty()) {
-                    val story = listOf(
-                        setUnitStory()
-                    )
-                    storiesAdapter.setData(story)
-                    Log.i("TAGStories", stories.toString())
-                } else {
-                    storiesAdapter.setData(stories)
-                }
+            storyViewModel.storyFlow.collect { stories ->
+                storiesAdapter.setData(stories)
             }
         }
 
-        lifecycleScope.launch {
-            storyViewModel.idsFlow.collectLatest { ids ->
-
-                if (ids.isNotEmpty()) {
-                    binding.recyclerVieHomeFragmentStories.recycledViewPool.clear()
-                    setupStoriesRecyclerView()
-                    storiesAdapter.setIdData(ids)
-                }
-            }
-        }
     }
 
     private fun setupRecyclerView() {
@@ -213,16 +195,6 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun setUnitStory(): StoryModel = StoryModel(
-        false,
-        System.currentTimeMillis(),
-        System.currentTimeMillis(),
-        firstRegisterUserImage,
-        userViewModel.userModel.value?.userName.toString(),
-        userViewModel.userModel.value?.uid.toString(),
-        "",
-        0,
-        firstRegisterUserImage
-    )
+
 
 }

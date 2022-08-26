@@ -28,6 +28,7 @@ interface StoryRepository {
 
     suspend fun getStories(): CollectionReference
     suspend fun getActiveStories(): DatabaseReference
+    suspend fun getStoriesIds(): DatabaseReference
     suspend fun updateStories(storyId: String)
     suspend fun getUserById(userId: String): DocumentReference
 
