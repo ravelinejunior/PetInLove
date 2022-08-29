@@ -71,7 +71,7 @@ class StoryAdapter(
 
         if (holder.bindingAdapterPosition == 0) {
             val binding = holder.viewBinding as ItemAddStoryAdapterBinding
-            myStory(binding.textViewAddStoryAdapterTitle, binding.imageViewAddStoryAdapter, false)
+            myStory(binding.textViewAddStoryAdapterTitle, binding.imageViewAddStoryAdapter, holder,false)
         }
 
         holder.itemView.setOnClickListener {
@@ -80,6 +80,7 @@ class StoryAdapter(
                 myStory(
                     binding.textViewAddStoryAdapterTitle,
                     binding.imageViewAddStoryAdapter,
+                    holder,
                     true
                 )
             } else {
@@ -131,7 +132,7 @@ class StoryAdapter(
         }
     }
 
-    private fun myStory(textView: TextView, circleImageView: CircleImageView, click: Boolean) {
+    private fun myStory(textView: TextView, circleImageView: CircleImageView,viewHolder: MyViewHolder, click: Boolean) {
 
         storyViewModel.viewModelScope.launch {
             storyViewModel.getStoriesGen().child(user.uid).addListenerForSingleValueEvent(object :
@@ -149,6 +150,7 @@ class StoryAdapter(
 
                     if (click) {
                         //Show alert dialog
+                        viewHolder.navigateToImagePick(fragment)
                     } else {
                         if (count > 0) {
                             "My Story".let { textView.text = it }
