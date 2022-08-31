@@ -11,6 +11,7 @@ plugins {
 android {
     compileSdk 32
 
+
     defaultConfig {
         applicationId "com.raveline.petinlove"
         minSdk 21
@@ -38,7 +39,6 @@ android {
         dataBinding = true
         viewBinding = true
     }
-
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -50,11 +50,7 @@ android {
 }
 
 dependencies {
-    
-    //Image picker
-    implementation "androidx.activity:activity-ktx:1.5.1"
-    implementation "androidx.fragment:fragment-ktx:1.5.2"
-
+    implementation 'com.github.shts:StoriesProgressView:3.0.0'
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
@@ -92,7 +88,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
 
     //Retrofit
-    def retrofit_version ="2.9.0"
+    def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
