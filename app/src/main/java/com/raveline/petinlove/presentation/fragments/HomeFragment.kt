@@ -167,7 +167,13 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             storyViewModel.storyFlow.collect { stories ->
-                storiesAdapter.setData(stories)
+               if (stories.isNotEmpty()){
+                   storiesAdapter.setData(stories)
+                   setupStoriesRecyclerView()
+               }else{
+                   storyViewModel.setFirstItem()
+                   storiesAdapter.setData(storyViewModel.storyFlow.value)
+               }
             }
         }
 

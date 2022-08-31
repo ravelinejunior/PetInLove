@@ -36,6 +36,8 @@ class StoryViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
+    private val _uiStateFlowStory = MutableStateFlow<UiState>(UiState.Initial)
+    val uiStateFlowStory: StateFlow<UiState> get() = _uiStateFlowStory
 
     private val _idsStoryStateFlow = MutableStateFlow<List<String>>(emptyList())
     val idsFlow: StateFlow<List<String>> get() = _idsStoryStateFlow
@@ -87,7 +89,7 @@ class StoryViewModel @Inject constructor(
         })
     }
 
-    suspend fun getStoriesGen():DatabaseReference = storyRepository.getActiveStories()
+    suspend fun getStoriesGen(): DatabaseReference = storyRepository.getActiveStories()
 
     fun setStoryOnServer(
         user: UserModel,
@@ -143,8 +145,12 @@ class StoryViewModel @Inject constructor(
         }
     }
 
-    fun setIds(ids: List<String>) {
-        _idsStoryStateFlow.value = ids
+    fun setFirstItem() {
+        _storyStateFlow.value.add(setUnitStory())
+    }
+
+    fun clearFirstItem() {
+        _storyStateFlow.value.clear(    )
     }
 
     private fun setUnitStory(): StoryModel = StoryModel(
