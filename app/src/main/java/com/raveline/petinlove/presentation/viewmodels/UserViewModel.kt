@@ -291,7 +291,8 @@ class UserViewModel @Inject constructor(
                                 userPhoneNumber = phone,
                                 uid = task.result.user?.uid.toString(),
                                 userProfileImage = firstRegisterUserImage,
-                            )
+
+                                )
 
                             saveUserOnPrefs(user)
 
@@ -326,14 +327,17 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    private fun userToMap(userModel: UserModel): HashMap<String, String> {
+    private fun userToMap(userModel: UserModel): HashMap<String, Any> {
         return hashMapOf(
             userFieldId to userModel.uid,
             userFieldName to userModel.userName,
             userFieldEmail to userModel.userEmail,
             userFieldPhoneNumber to userModel.userPhoneNumber,
             userFieldProfileImage to userModel.userProfileImage,
-            userFieldDescription to userModel.userDescription
+            userFieldDescription to userModel.userDescription,
+            userFieldFollowing to userModel.userFollowing,
+            userFieldFollowers to userModel.userFollowers,
+            userFieldPublications to userModel.userFollowing
         )
     }
 
@@ -345,6 +349,9 @@ class UserViewModel @Inject constructor(
             userPhoneNumber = result[userFieldPhoneNumber].toString(),
             userDescription = result[userFieldDescription].toString(),
             userProfileImage = result[userFieldProfileImage].toString(),
+            userFollowers = result[userFieldFollowers].toString().toInt(),
+            userFollowing = result[userFieldFollowing].toString().toInt(),
+            userPublications = result[userFieldPublications].toString().toInt(),
             id = 0
         )
     }
