@@ -20,8 +20,8 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ViewStoryActivity"
-            android:exported="false" />
+            android:name=".presentation.activities.ViewStoryActivity"
+            android:exported="true" />
         <activity
             android:name=".presentation.activities.HomeActivity"
             android:exported="true" />

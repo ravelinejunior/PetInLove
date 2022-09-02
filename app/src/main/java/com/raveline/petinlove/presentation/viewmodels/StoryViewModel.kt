@@ -36,13 +36,16 @@ class StoryViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
     val uiStateFlow: StateFlow<UiState> get() = _uiStateFlow
-    private val _uiStateFlowStory = MutableStateFlow<UiState>(UiState.Initial)
-    val uiStateFlowStory: StateFlow<UiState> get() = _uiStateFlowStory
 
     private val _idsStoryStateFlow = MutableStateFlow<List<String>>(emptyList())
     val idsFlow: StateFlow<List<String>> get() = _idsStoryStateFlow
 
     val user = SystemFunctions.getLoggedUserFromPref(application)
+
+    private val _imagesMutableStateFlow = MutableStateFlow<ArrayList<String>>(arrayListOf())
+    val imagesStateFlow: StateFlow<List<String>> get() = _imagesMutableStateFlow
+
+    var storyIds: ArrayList<String> = arrayListOf()
 
     suspend fun getUserById(userId: String): DocumentReference = storyRepository.getUserById(userId)
 
@@ -90,6 +93,36 @@ class StoryViewModel @Inject constructor(
     }
 
     suspend fun getStoriesGen(): DatabaseReference = storyRepository.getActiveStories()
+
+    fun getStoriesImages(userId: String) = viewModelScope.launch {
+        storyRepository.getActiveStories().child(userId).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                storyIds.clear()
+                _imagesMutableStateFlow.value.clear()
+                val arrayImage = arrayListOf<String>()
+                for (doc in snapshot.children) {
+                    val storyMap = doc.value as Map<String, Any>
+                    val story = mapToStory(storyMap)
+                    val timeCurrent = System.currentTimeMillis()
+                    val timeCorrect =
+                        timeCurrent > story.timeStart && timeCurrent < story.timeEnd
+
+                    if (timeCorrect) {
+                        arrayImage.add(story.imagePath)
+                        storyIds.add(story.storyId)
+                    }
+
+                }
+
+                _imagesMutableStateFlow.value = arrayImage
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
 
     fun setStoryOnServer(
         user: UserModel,
@@ -147,10 +180,6 @@ class StoryViewModel @Inject constructor(
 
     fun setFirstItem() {
         _storyStateFlow.value.add(setUnitStory())
-    }
-
-    fun clearFirstItem() {
-        _storyStateFlow.value.clear(    )
     }
 
     private fun setUnitStory(): StoryModel = StoryModel(

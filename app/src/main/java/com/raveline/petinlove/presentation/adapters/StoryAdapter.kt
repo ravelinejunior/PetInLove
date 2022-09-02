@@ -24,6 +24,7 @@ import com.raveline.petinlove.domain.utils.ListDiffUtil
 import com.raveline.petinlove.domain.utils.SystemFunctions
 import com.raveline.petinlove.domain.utils.firstRegisterUserImage
 import com.raveline.petinlove.domain.utils.storyFirebaseDocumentReference
+import com.raveline.petinlove.presentation.fragments.HomeFragmentDirections
 import com.raveline.petinlove.presentation.viewmodels.StoryViewModel
 import kotlinx.coroutines.launch
 
@@ -74,7 +75,9 @@ class StoryAdapter(
                     position
                 )
             } else {
-                //TODO: go to story selected
+                val directions =
+                    HomeFragmentDirections.actionHomeFragmentToViewStoryActivity(story.userId)
+                fragment.findNavController().navigate(directions)
             }
         }
 

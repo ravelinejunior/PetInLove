@@ -1,39 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.activities.ViewStoryActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imageViewStoryActivity"
+    <data>
+
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_gallery_choose"
-        />
+        android:backgroundTint="@color/black"
+        tools:context=".presentation.activities.ViewStoryActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
-        <View
-            android:id="@+id/backStoryActivity"
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/imageViewStoryActivity"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-        <View
-            android:id="@+id/nextStoryActivity"
-            android:layout_width="0dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_gallery_choose" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/backStoryActivity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/nextStoryActivity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <jp.shts.android.storiesprogressview.StoriesProgressView
+            android:id="@+id/storiesProgressViewStoryActivity"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_4sdp"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutStoryActivityUserData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageViewStoryActivity"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_gallery_choose" />
+
+            <TextView
+                android:id="@+id/textViewStoryActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                tools:text="Pip for you"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_below="@id/circleImageViewStoryActivity" />
 
 
-</RelativeLayout>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>
