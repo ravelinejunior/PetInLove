@@ -50,7 +50,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.shts:StoriesProgressView:3.0.0'
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
