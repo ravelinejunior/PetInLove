@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.navArgs
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.raveline.petinlove.R
+import com.raveline.petinlove.data.model.UserModel
 import com.raveline.petinlove.data.model.hashMapToUserModel
 import com.raveline.petinlove.databinding.ActivityViewStoryBinding
+import com.raveline.petinlove.domain.utils.SystemFunctions
 import com.raveline.petinlove.presentation.viewmodels.StoryViewModel
 import com.raveline.petinlove.presentation.viewmodels.factory.StoryViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +43,8 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     private val args by navArgs<ViewStoryActivityArgs>()
 
+    private lateinit var myUser: UserModel
+
     @SuppressLint("ClickableViewAccessibility")
     private val onTouchListener = View.OnTouchListener { _, motionEvent ->
 
@@ -64,13 +68,22 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         super.onCreate(savedInstanceState)
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_view_story)
         setContentView(binding.root)
-        storyViewModel.getStoriesImages(args.userId)
         initView()
         initObservers()
 
     }
 
     private fun initView() {
+        storyViewModel.getStoriesImages(
+            args.userId,
+        )
+
+        myUser = SystemFunctions.getLoggedUserFromPref(this)!!
+        if (myUser.uid == args.userId) {
+            binding.apply {
+                imageViewStoryActivityDeleteViews.visibility = VISIBLE
+            }
+        }
 
         circular = CircularProgressDrawable(applicationContext).apply {
             strokeWidth = 10f
@@ -88,6 +101,14 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 storiesProgressViewStoryActivity.skip()
             }
             nextStoryActivity.setOnTouchListener(onTouchListener)
+
+            imageViewStoryActivityDeleteViews.setOnClickListener {
+                storyViewModel.deleteStory(
+                    args.userId,
+                    storyViewModel.storyFlow.value[counter].storyId,
+                    binding.root
+                )
+            }
         }
     }
 
@@ -136,19 +157,21 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     override fun onNext() {
         Glide.with(baseContext)
-            .load(storyViewModel.imagesStateFlow.value[counter++])
+            .load(storyViewModel.imagesStateFlow.value[++counter])
             .placeholder(circular)
             .centerCrop()
             .into(binding.circleImageViewStoryActivity)
+
     }
 
     override fun onPrev() {
         if ((counter - 1) < 0) return
         Glide.with(baseContext)
-            .load(storyViewModel.imagesStateFlow.value[counter++])
+            .load(storyViewModel.imagesStateFlow.value[++counter])
             .placeholder(circular)
             .centerCrop()
             .into(binding.circleImageViewStoryActivity)
+
     }
 
     override fun onComplete() {

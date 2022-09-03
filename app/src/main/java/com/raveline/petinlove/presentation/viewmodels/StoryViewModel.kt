@@ -3,8 +3,10 @@ package com.raveline.petinlove.presentation.viewmodels
 import android.app.Application
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -47,7 +49,13 @@ class StoryViewModel @Inject constructor(
 
     var storyIds: ArrayList<String> = arrayListOf()
 
+    var numberOfViews = 0
+
     suspend fun getUserById(userId: String): DocumentReference = storyRepository.getUserById(userId)
+
+    init {
+        getActiveStories()
+    }
 
     fun getActiveStories() = viewModelScope.launch {
 
@@ -94,7 +102,18 @@ class StoryViewModel @Inject constructor(
 
     suspend fun getStoriesGen(): DatabaseReference = storyRepository.getActiveStories()
 
-    fun getStoriesImages(userId: String) = viewModelScope.launch {
+    fun deleteStory(userId: String, storyId: String, view: View) = viewModelScope.launch {
+        storyRepository.getActiveStories().child(userId).child(storyId).removeValue { error, ref ->
+            if (error != null) {
+                Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_SHORT).show()
+            } else {
+                Snackbar.make(view, "Story deleted!", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun getStoriesImages(userId: String, storyId: String? = null) = viewModelScope.launch {
+
         storyRepository.getActiveStories().child(userId).addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

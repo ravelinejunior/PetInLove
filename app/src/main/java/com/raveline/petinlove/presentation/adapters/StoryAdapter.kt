@@ -193,7 +193,7 @@ class StoryAdapter(
                             val timeCorrect =
                                 currentTime > story.timeStart && currentTime < story.timeEnd
 
-                            if (doc.child(storyFirebaseDocumentReference).child(user.uid)
+                            if (doc.child(story.storyId).child(storyFirebaseDocumentReference)
                                     .exists() && !timeCorrect
                             ) {
                                 count++
