@@ -75,7 +75,7 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     private fun initView() {
         storyViewModel.getStoriesImages(
-            args.userId,
+            args.userId
         )
 
         myUser = SystemFunctions.getLoggedUserFromPref(this)!!
@@ -160,7 +160,7 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             .load(storyViewModel.imagesStateFlow.value[++counter])
             .placeholder(circular)
             .centerCrop()
-            .into(binding.circleImageViewStoryActivity)
+            .into(binding.imageViewStoryActivity)
 
     }
 
@@ -170,7 +170,7 @@ class ViewStoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             .load(storyViewModel.imagesStateFlow.value[++counter])
             .placeholder(circular)
             .centerCrop()
-            .into(binding.circleImageViewStoryActivity)
+            .into(binding.imageViewStoryActivity)
 
     }
 

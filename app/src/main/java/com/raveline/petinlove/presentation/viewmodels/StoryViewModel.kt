@@ -49,8 +49,6 @@ class StoryViewModel @Inject constructor(
 
     var storyIds: ArrayList<String> = arrayListOf()
 
-    var numberOfViews = 0
-
     suspend fun getUserById(userId: String): DocumentReference = storyRepository.getUserById(userId)
 
     init {
@@ -81,6 +79,9 @@ class StoryViewModel @Inject constructor(
                             story = mapToStory(storyMap)
                             if (currentTime > story.timeStart && currentTime < story.timeEnd) {
                                 count++
+                            }else{
+                                // function to delete node if it pass one day
+                                deleteStory(id,story.storyId)
                             }
                         }
 
@@ -102,17 +103,19 @@ class StoryViewModel @Inject constructor(
 
     suspend fun getStoriesGen(): DatabaseReference = storyRepository.getActiveStories()
 
-    fun deleteStory(userId: String, storyId: String, view: View) = viewModelScope.launch {
+    fun deleteStory(userId: String, storyId: String, view: View?=null) = viewModelScope.launch {
         storyRepository.getActiveStories().child(userId).child(storyId).removeValue { error, ref ->
-            if (error != null) {
-                Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_SHORT).show()
-            } else {
-                Snackbar.make(view, "Story deleted!", Snackbar.LENGTH_SHORT).show()
-            }
+          if(view != null ){
+              if (error != null) {
+                  Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_SHORT).show()
+              } else {
+                  Snackbar.make(view, "Story deleted!", Snackbar.LENGTH_SHORT).show()
+              }
+          }
         }
     }
 
-    fun getStoriesImages(userId: String, storyId: String? = null) = viewModelScope.launch {
+    fun getStoriesImages(userId: String) = viewModelScope.launch {
 
         storyRepository.getActiveStories().child(userId).addListenerForSingleValueEvent(object :
             ValueEventListener {
@@ -138,7 +141,6 @@ class StoryViewModel @Inject constructor(
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
         })
     }

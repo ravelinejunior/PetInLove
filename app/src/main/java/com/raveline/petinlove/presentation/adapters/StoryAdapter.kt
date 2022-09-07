@@ -114,6 +114,13 @@ class StoryAdapter(
                             .dontAnimate()
                             .dontTransform()
                             .into(binding.imageViewStoryAdapterNotSeen)
+
+                        Glide.with(binding.imageViewStoryAdapterSeen)
+                            .load(mUser.userProfileImage)
+                            .fitCenter()
+                            .dontAnimate()
+                            .dontTransform()
+                            .into(binding.imageViewStoryAdapterSeen)
                         binding.textViewStoryAdapterUserName.text = mUser.userName
                     }
 
