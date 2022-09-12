@@ -8,12 +8,11 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.PostModel
 import com.raveline.petinlove.data.model.UserModel
+import com.raveline.petinlove.data.model.mapToPostLocal
 import com.raveline.petinlove.domain.repository_impl.PostRepositoryImpl
-import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -25,8 +24,6 @@ import java.util.*
 
 class PostViewModel(
     private val postRepository: PostRepositoryImpl,
-    private val userRepository: UserRepositoryImpl,
-    private val fireStore: FirebaseFirestore,
     private val firebaseAuth: FirebaseAuth,
     private val application: Application,
 ) : ViewModel() {
@@ -73,6 +70,14 @@ class PostViewModel(
                                     .addOnCompleteListener {
                                         if (it.isSuccessful) {
                                             _uiStateFlow.value = UiState.Success
+                                            viewModelScope.launch(IO) {
+                                                //Save Local Post
+                                                postRepository.insertLocalPost(
+                                                    mapToPostLocal(
+                                                        postMap
+                                                    )
+                                                )
+                                            }
                                         }
                                     }.addOnFailureListener {
                                         _uiStateFlow.value = UiState.Error
@@ -119,6 +124,15 @@ class PostViewModel(
                     posts.add(post)
                 }
 
+                //delete local data
+                viewModelScope.launch {
+                    postRepository.deleteLocalPosts(posts)
+
+                    //save local data
+                    for (post in posts) {
+                        postRepository.insertLocalPost(post)
+                    }
+                }
                 _postsStateFlow.value = posts
                 _uiStateFlow.value = UiState.Success
             } else {
@@ -130,7 +144,7 @@ class PostViewModel(
             }
     }
 
-    suspend fun getPostsById():CollectionReference{
+    suspend fun getPostsById(): CollectionReference {
         return postRepository.getPostsById()
     }
 
@@ -147,5 +161,6 @@ class PostViewModel(
             id = 0
         )
     }
+
 
 }

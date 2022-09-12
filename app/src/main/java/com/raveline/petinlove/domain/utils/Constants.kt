@@ -63,6 +63,12 @@ const val storyIdFieldStory = "storyId"
 const val viewsFieldStory = "views"
 const val userImageFieldStory = "profileImage"
 
+//Local Database Data
+const val appLocalDatabaseName = "APP_DATABASE"
+const val postLocalDatabaseTable = "POST_TABLE"
+const val userLocalDatabaseTable = "USER_TABLE"
+const val commentLocalDatabaseTable = "COMMENT_TABLE"
+
 const val mediaStoreKeyProfileImage = 165164
 const val postStoreKeyProfileImage = 4455
 const val storyStoreKeyImage = 6652

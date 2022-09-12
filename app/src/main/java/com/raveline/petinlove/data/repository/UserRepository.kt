@@ -5,6 +5,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.raveline.petinlove.data.model.UserModel
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun saveUserOnServer(email: String, password: String): Task<AuthResult>
@@ -16,4 +17,15 @@ interface UserRepository {
     ): Task<Void>
 
     suspend fun getSearchUsers(): CollectionReference
+
+    // Local Data
+
+    suspend fun saveLocalCurrentUser(user: UserModel)
+    suspend fun deleteLocalCurrentUser(id: String)
+    suspend fun deleteAllLocalUsers(users: List<UserModel>)
+    suspend fun updateLocalUser(user: UserModel)
+
+    fun getLocalUsers(): Flow<List<UserModel>>
+    fun getCurrentLocalUser(id: String): Flow<UserModel>
+    fun getSearchLocalUsers(search: String): Flow<List<UserModel>>
 }

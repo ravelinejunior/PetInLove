@@ -41,6 +41,18 @@ class CommentViewModel @Inject constructor(
                         }
 
                         _commentariesMutStateFlow.value = comments
+
+                        //delete data first
+                        viewModelScope.launch {
+                            commentsRepository.deleteLocalComments(comments)
+                        }
+
+                        //inserting comments on database
+                        viewModelScope.launch {
+                            for (comment in comments) {
+                                commentsRepository.insertLocalComment(comment)
+                            }
+                        }
                         _uiStateFlow.value = UiState.Success
                     } else {
                         _uiStateFlow.value = UiState.Error
@@ -74,6 +86,9 @@ class CommentViewModel @Inject constructor(
                     .addOnCompleteListener { mTask ->
                         if (mTask.isSuccessful) {
                             _commentStateFlow.value = UiState.Success
+                            viewModelScope.launch {
+                                commentsRepository.insertLocalComment(commentModel)
+                            }
                         } else {
                             _commentStateFlow.value = UiState.Error
                         }

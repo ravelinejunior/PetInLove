@@ -1,12 +1,17 @@
 package com.raveline.petinlove.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.raveline.petinlove.domain.utils.*
 import java.io.Serializable
 
+@Entity(tableName = commentLocalDatabaseTable)
 data class CommentModel(
+    @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+
     val idUser: String,
     val idComment: String,
     val idPost: String,
