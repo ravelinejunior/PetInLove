@@ -9,19 +9,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.raveline.petinlove.data.listener.UiState
 import com.raveline.petinlove.data.model.UserModel
+import com.raveline.petinlove.data.model.hashMapToUserModel
+import com.raveline.petinlove.data.model.userToMap
 import com.raveline.petinlove.domain.repository_impl.UserRepositoryImpl
 import com.raveline.petinlove.domain.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,9 +52,23 @@ class UserViewModel @Inject constructor(
     private val _userListFlow = MutableLiveData<List<UserModel>>()
     val userListModel: LiveData<List<UserModel>> get() = _userListFlow
 
+    private val _usersLocalFlow = MutableStateFlow<List<UserModel>>(emptyList())
+    val usersLocalFlow: StateFlow<List<UserModel>> get() = _usersLocalFlow
+
     var imagePath = ""
     var profileImage = ""
     var result = ""
+
+    init {
+        runBlocking {
+            val usersLocal = userRepository.getLocalUsers()
+            usersLocal.collect { users ->
+                if (users.isNotEmpty()) {
+                    _usersLocalFlow.value = users
+                }
+            }
+        }
+    }
 
     private fun getUserData() {
 
@@ -63,14 +80,12 @@ class UserViewModel @Inject constructor(
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val result = task.result
-                            saveUserOnPrefs(mapToUser(result))
+                            saveUserOnPrefs(hashMapToUserModel(result))
                             getLoggedUserFromPref()
                             profileImage = result[userFieldProfileImage].toString()
                         }
                     }
             }
-
-
         }
     }
 
@@ -79,7 +94,7 @@ class UserViewModel @Inject constructor(
             _uiUserProfileStateFlow.value = UiState.Loading
             userRepository.getUserDataFromServer(userId).addOnSuccessListener { doc ->
                 if (doc != null) {
-                    val user = mapToUser(doc)
+                    val user = hashMapToUserModel(doc)
                     _userProfileFlow.value = user
                     _uiUserProfileStateFlow.value = UiState.Success
                 } else {
@@ -106,7 +121,7 @@ class UserViewModel @Inject constructor(
                                 if (doc[userFieldName].toString()
                                         .contains(name, ignoreCase = true)
                                 ) {
-                                    users.add(mapToUser(doc))
+                                    users.add(hashMapToUserModel(doc))
                                 }
 
                             }
@@ -122,7 +137,7 @@ class UserViewModel @Inject constructor(
                     if (value != null) {
                         _userListFlow.value = emptyList()
                         for (doc in value.documents) {
-                            users.add(mapToUser(doc))
+                            users.add(hashMapToUserModel(doc))
                         }
 
                         _userListFlow.value = users
@@ -254,18 +269,26 @@ class UserViewModel @Inject constructor(
                 userRepository.loginUserFromServer(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-
                             val result = task.result
                             viewModelScope.launch {
                                 userRepository.getUserDataFromServer(result.user!!.uid)
                                     .addOnSuccessListener { doc ->
-                                        saveUserOnPrefs(mapToUser(doc))
-                                        getUserData()
-                                        _uiStateFlow.value = UiState.Success
+
+                                        //Store Local Data
+                                        viewModelScope.launch {
+                                            userRepository.saveLocalCurrentUser(
+                                                hashMapToUserModel(
+                                                    doc
+                                                )
+                                            )
+                                            joinAll()
+                                            saveUserOnPrefs(hashMapToUserModel(doc))
+                                            getUserData()
+                                            _uiStateFlow.value = UiState.Success
+                                        }
+
                                     }
                             }
-
-
                         } else {
                             _uiStateFlow.value = UiState.Error
                         }
@@ -291,8 +314,7 @@ class UserViewModel @Inject constructor(
                                 userPhoneNumber = phone,
                                 uid = task.result.user?.uid.toString(),
                                 userProfileImage = firstRegisterUserImage,
-
-                                )
+                            )
 
                             saveUserOnPrefs(user)
 
@@ -300,7 +322,16 @@ class UserViewModel @Inject constructor(
                                 .set(userToMap(user)).addOnCompleteListener { fireTask ->
 
                                     if (fireTask.isSuccessful) {
-                                        _uiStateFlow.value = UiState.Success
+                                        //Save Local Data
+                                        val job = viewModelScope.launch {
+                                            userRepository.saveLocalCurrentUser(user)
+                                        }
+
+                                        viewModelScope.launch {
+                                            job.join()
+                                            _uiStateFlow.value = UiState.Success
+                                        }
+
                                     } else {
                                         _uiStateFlow.value = UiState.Error
                                     }
@@ -325,35 +356,7 @@ class UserViewModel @Inject constructor(
         sharedPref.edit(true) {
             clear()
         }
-    }
-
-    private fun userToMap(userModel: UserModel): HashMap<String, Any> {
-        return hashMapOf(
-            userFieldId to userModel.uid,
-            userFieldName to userModel.userName,
-            userFieldEmail to userModel.userEmail,
-            userFieldPhoneNumber to userModel.userPhoneNumber,
-            userFieldProfileImage to userModel.userProfileImage,
-            userFieldDescription to userModel.userDescription,
-            userFieldFollowing to userModel.userFollowing,
-            userFieldFollowers to userModel.userFollowers,
-            userFieldPublications to userModel.userFollowing
-        )
-    }
-
-    private fun mapToUser(result: DocumentSnapshot): UserModel {
-        return UserModel(
-            uid = result[userFieldId].toString(),
-            userName = result[userFieldName].toString(),
-            userEmail = result[userFieldEmail].toString(),
-            userPhoneNumber = result[userFieldPhoneNumber].toString(),
-            userDescription = result[userFieldDescription].toString(),
-            userProfileImage = result[userFieldProfileImage].toString(),
-            userFollowers = result[userFieldFollowers].toString().toInt(),
-            userFollowing = result[userFieldFollowing].toString().toInt(),
-            userPublications = result[userFieldPublications].toString().toInt(),
-            id = 0
-        )
+        userRepository.deleteAllLocalUsers()
     }
 
     private fun saveUserOnPrefs(user: UserModel) {

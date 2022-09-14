@@ -21,8 +21,8 @@ sealed interface UserDao {
     @Query("DELETE FROM USER_TABLE WHERE uid == :id")
     suspend fun deleteCurrentLocalUser(id: String)
 
-    @Delete
-    suspend fun deleteUsers(users: List<UserModel>)
+    @Query("DELETE FROM USER_TABLE")
+    suspend fun deleteUsers()
 
     @Update
     suspend fun updateUser(user: UserModel)

@@ -22,7 +22,7 @@ interface UserRepository {
 
     suspend fun saveLocalCurrentUser(user: UserModel)
     suspend fun deleteLocalCurrentUser(id: String)
-    suspend fun deleteAllLocalUsers(users: List<UserModel>)
+    suspend fun deleteAllLocalUsers()
     suspend fun updateLocalUser(user: UserModel)
 
     fun getLocalUsers(): Flow<List<UserModel>>

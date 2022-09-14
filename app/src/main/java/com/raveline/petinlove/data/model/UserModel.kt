@@ -51,3 +51,4 @@ fun userToMap(userModel: UserModel): HashMap<String, String> {
         userFieldPublications to userModel.userPublications.toString(),
     )
 }
+

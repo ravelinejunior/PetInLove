@@ -49,8 +49,8 @@ class UserRepositoryImpl @Inject constructor(
         userDao.deleteCurrentLocalUser(id)
     }
 
-    override suspend fun deleteAllLocalUsers(users: List<UserModel>) {
-        userDao.deleteUsers(users)
+    override suspend fun deleteAllLocalUsers() {
+        userDao.deleteUsers()
     }
 
     override suspend fun updateLocalUser(user: UserModel) {
